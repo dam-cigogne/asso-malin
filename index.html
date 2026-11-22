@@ -2994,7 +2994,7 @@ var Q=M["index"];window.QRCodeLib=Q;window.qrMatrix=function(txt,ec){var q=new Q
 (function(){
 'use strict';
 /* ========= Agenda · données, dates, récurrences, .ics, sauvegarde ========= */
-const APP_VERSION='2.82.191';const APP_SHOW='1.0';
+const APP_VERSION='2.82.192';const APP_SHOW='1.0';
 /* Appli « Asso malin » : même code, publiée aussi sur l’adresse de ton appli/ (seul l'onglet du groupe). Mémoire séparée : préfixe agd-am- */
 const AMI=true;
 const P=AMI?'agd-am-':'agd-';
@@ -3002,7 +3002,7 @@ const K={data:P+'data',set:P+'settings',meta:P+'meta',fired:P+'fired',ms:P+'ms'}
 const BACKUP_FILE=AMI?'amicale-sauvegarde.json':'agenda-sauvegarde.json';
 const ICS_FILE='agenda.ics';
 const CHANGELOG=[
-{v:'2.82.191',d:'22/11/2026',items:['Première version de Asso malin.']}
+{v:'2.82.192',d:'22/11/2026',items:['Première version de Asso malin.']}
 ];
 
 const $=(s,r=document)=>r.querySelector(s);
@@ -7429,7 +7429,7 @@ function openHelp(hist){
  h+=d('Installer sur iPhone ou Android','<p><b>iPhone (Safari)</b> : ouvre le lien dans <b>Safari</b> → bouton Partager (carré avec flèche) → <b>Sur l’écran d’accueil</b> → Ajouter.</p><p><b>Android (Chrome)</b> : ouvre le lien → menu ⋮ → <b>Installer l’application</b> (ou « Ajouter à l’écran d’accueil »).</p><p>Une fois installée, l’appli fonctionne <b>sans connexion</b>.</p>');
  h+=d('Confidentialité et stockage','<ul><li>Aucun compte, aucun serveur, aucune publicité, aucune statistique : tes données restent sur l’appareil.</li><li>Sur iPhone, Safari peut effacer les données d’un site non installé après environ 7 jours sans visite. <b>Installe l’appli sur l’écran d’accueil et sauvegarde</b> pour ne rien perdre.</li></ul>');
  h+='<details id="hist"'+(hist?' open':'')+'><summary>Historique des 5 dernières versions</summary>'+CHANGELOG.slice(0,5).map(c=>'<div class="ver"><b>Version '+c.v+' · '+c.d+'</b><ul>'+c.items.map(i=>'<li>'+esc(i)+'</li>').join('')+'</ul></div>').join('')+'<p class="mut">Tout l’historique depuis le début : Réglages → Outils développeur.</p></details>';
- h+='<p class="mut" style="margin-top:1rem">Asso malin · version '+APP_SHOW+'</p>';
+ h+='<p class="mut" style="margin-top:1rem">Asso malin · version '+APP_SHOW+'</p><p class="mut" style="margin-top:.4rem"><a href="https://github.com/dam-cigogne/asso-malin#readme" target="_blank" rel="noopener">📖 Présentation (README)</a> · <a href="tuto.html">📖 Installer mon serveur</a> · <a href="maj.html">🔄 Mettre à jour</a></p>';
  if(AMI){const parts=h.split('<details');h=parts[0].replace('Mode d’emploi','Asso malin : mode d’emploi')+d('Démarrer','<ul><li><a href="visite.html" target="_blank" rel="noopener"><b>▶ Visite guidée</b></a> (plein écran, on touche pour avancer) ou <a href="guide.html" target="_blank" rel="noopener"><b>📖 Guide du bureau</b></a> : six cas concrets avec les vrais écrans (rejoindre, inscrire et faire signer, archiver, tâches et courses, soirée de Noël et Jour J, bilan de réunion).</li><li>Cette appli ne contient que <b>ton groupe</b> (amicale, club…). Rejoins-le avec le <b>code d’invitation</b> reçu, ou crée-le.</li><li>En haut : 🔍 recherche, ⚙ réglages (couleur, thème, sauvegarde), ? cette aide.</li><li>Le même groupe s’ouvre aussi dans Asso malin : vous voyez les mêmes informations.</li></ul>',1)+parts.slice(1).filter(x=>/Groupe \(amicale/.test(x)).map(x=>'<details'+x).join('')+'<p class="mut" style="margin-top:1rem">Asso malin · version '+APP_VERSION+'</p>'}
  openSheet(h,'full');
  if(hist){const x=$('#hist');if(x)x.scrollIntoView()}

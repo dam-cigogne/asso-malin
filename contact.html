@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#7c3aed">
+<meta name="robots" content="noindex">
+<title>Contacter le groupe</title>
+<style>
+:root{--ac:#7c3aed;--ac2:#db2777;--bg:#f6f3fb;--card:#fff;--tx:#1f1633;--mut:#6b6280;--line:#e4dcf2}
+@media (prefers-color-scheme:dark){:root{--bg:#120d1f;--card:#1d1630;--tx:#f3eefc;--mut:#b3a8c9;--line:#342a4f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.top{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;padding:28px 18px 70px;text-align:center}
+.top small{display:block;opacity:.9;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.8rem}
+.top h1{margin:.3rem 0 .2rem;font:italic 700 1.9rem/1.15 Georgia,"Times New Roman",serif}
+.top p{margin:.2rem 0 0;font-weight:600}
+.wrap{max-width:560px;margin:-50px auto 30px;padding:0 14px}
+.card{background:var(--card);border-radius:20px;padding:18px;box-shadow:0 10px 30px rgba(60,20,120,.15)}
+h2{margin:0 0 .6rem;font-size:1.2rem}
+label{display:block;margin:.65rem 0 .2rem;font-weight:700;font-size:.92rem}
+label small{font-weight:400;color:var(--mut)}
+input,textarea,select{width:100%;font:inherit;font-size:16px;padding:.7rem .8rem;border:1.5px solid var(--line);border-radius:12px;background:transparent;color:var(--tx)}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
+.row{display:flex;gap:10px}.row>div{flex:1;min-width:0}
+.num{display:flex;align-items:center;gap:8px}.num button{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--tx);font-size:1.4rem;cursor:pointer}.num input{text-align:center;font-weight:800;font-size:1.15rem}
+.seg{display:flex;gap:8px;flex-wrap:wrap}.seg button{flex:1 1 40%;min-width:6rem;padding:.65rem;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--tx);font:inherit;font-weight:700;cursor:pointer}.seg button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.go{display:block;width:100%;margin-top:1.1rem;padding:.95rem;border:0;border-radius:14px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;font:inherit;font-weight:800;font-size:1.08rem;cursor:pointer}
+.go[disabled]{opacity:.6}
+.mut{color:var(--mut);font-size:.85rem}
+.err{color:#c0392b;font-weight:700;margin-top:.6rem}
+.paper{background:#fff;color:#1a1a1a;border-radius:12px;padding:14px 14px 10px;border:1px solid var(--line);max-height:52vh;overflow:auto;font-size:.88rem;line-height:1.4;-webkit-overflow-scrolling:touch}
+.paper .ti{font-weight:900;text-align:center;border:2px solid #1a1a1a;padding:8px;margin:0 0 10px;text-transform:uppercase}
+.paper .ar{font-weight:800;text-decoration:underline;margin:.7rem 0 .2rem}.paper p{margin:.25rem 0}.paper ul{margin:.2rem 0 .2rem 1.1rem;padding:0}
+.bu{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;border-top:1px solid #ddd;padding-top:10px}.bu div{flex:1 1 30%;min-width:90px;text-align:center;font-size:.8rem}.bu u{display:block}.bu img{max-width:100%;height:42px;object-fit:contain}
+.me{border:1.5px solid #1a1a1a;border-radius:8px;padding:8px 10px;margin-top:12px;font-size:.85rem}.me b{font-weight:800}
+.pay{margin:.9rem 0 .2rem;padding:.75rem .9rem;border-radius:14px;background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(219,39,119,.12));font-weight:700}
+.pay big{font-size:1.5rem;font-weight:900;color:var(--ac)}
+#sgc{width:100%;height:auto;aspect-ratio:760/260;background:#fff;border:2px dashed #c4b5fd;border-radius:14px;touch-action:none;display:block;margin-top:.3rem}
+.lnk{background:none;border:0;color:var(--ac);font:inherit;font-weight:700;padding:.4rem 0;cursor:pointer}
+.phs{display:flex;gap:10px;flex-wrap:wrap}.phs div{position:relative}.phs img{width:96px;height:96px;object-fit:cover;border-radius:12px;border:1.5px solid var(--line);display:block}.phs button{position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;border:0;background:#c0392b;color:#fff;font-weight:800;cursor:pointer}
+.ok{text-align:center;padding:10px 4px}.ok b{font-size:3rem;display:block}
+
+/* animations (2.82.25) */
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
+#fx i{position:absolute;top:-40px;font-style:normal;opacity:.85;animation:fxFall linear infinite;text-shadow:0 0 6px rgba(255,255,255,.8)}
+@keyframes fxFall{to{transform:translate3d(var(--dx,20px),110vh,0) rotate(360deg)}}
+#fx b{position:absolute;top:8%;left:-30%;width:120px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#fff,#fde68a);box-shadow:0 0 10px #fde68a;transform:rotate(18deg);animation:fxStar 7s ease-in 1.5s infinite}
+@keyframes fxStar{0%{left:-30%;top:4%;opacity:0}8%{opacity:1}22%{left:120%;top:26%;opacity:0}100%{left:120%;top:26%;opacity:0}}
+.top{background-size:220% 220%!important;animation:fxPan 9s ease-in-out infinite}
+@keyframes fxPan{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.top h1{animation:fxPop .9s cubic-bezier(.2,1.6,.4,1) both}.top p,.top small,.top .ev,.top .meta,.top .g{animation:fxUp .8s .25s ease both}
+@keyframes fxPop{0%{transform:scale(.6);opacity:0}100%{transform:none;opacity:1}}@keyframes fxUp{0%{transform:translateY(12px);opacity:0}100%{transform:none;opacity:1}}
+.go{animation:fxGlow 2.4s ease-in-out infinite}@keyframes fxGlow{0%,100%{box-shadow:0 6px 18px rgba(124,58,237,.25)}50%{box-shadow:0 8px 28px rgba(219,39,119,.55)}}
+.ok b{display:inline-block;animation:fxBounce 1s cubic-bezier(.2,1.8,.4,1) both}@keyframes fxBounce{0%{transform:scale(0) rotate(-30deg)}100%{transform:none}}
+.cf{position:fixed;top:-12px;width:9px;height:14px;z-index:60;pointer-events:none;border-radius:2px;animation:fxCf 2.6s cubic-bezier(.3,.6,.5,1) forwards}
+@keyframes fxCf{to{transform:translate3d(var(--dx),105vh,0) rotate(var(--r));opacity:.9}}
+@media (prefers-reduced-motion:reduce){#fx,.cf{display:none}.top,.top h1,.top *,.go,.ok b{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="top"><small id="g"></small><h1>Une idée ? Un souci ?</h1><p>Nous sommes là pour toi !</p></div>
+<div class="wrap"><div class="card" id="c">
+<h2>✉️ Écrire à l’amicale</h2>
+<p class="mut" style="margin:-.2rem 0 .3rem">Ton message arrive directement au bureau de l’amicale. On te répond par mail.</p>
+<label>C’est…</label><div class="seg" id="ty"><button type="button" data-v="i" class="on">💡 Une idée</button><button type="button" data-v="q">❓ Une question</button><button type="button" data-v="p">⚠️ Un problème</button><button type="button" data-v="a">✉️ Autre</button></div>
+<label for="x">Ton message</label><textarea id="x" rows="6" maxlength="1500" placeholder="Écris ici…"></textarea>
+<label>📷 Une photo <small>(facultatif, 2 au maximum : un problème à montrer, une affiche…)</small></label><div id="phs" class="phs"></div><button type="button" class="lnk" id="phb">＋ Ajouter une photo</button><input type="file" id="phf" accept="image/*" hidden>
+<label for="nm">Ton nom et prénom <small>(conseillé, mais pas obligatoire)</small></label><input id="nm" autocomplete="name" maxlength="60">
+<label for="ml">Ton mail <small>(pour qu’on puisse te répondre)</small></label><input id="ml" type="email" autocomplete="email" maxlength="80">
+<label for="tl">Ton téléphone <small>(facultatif)</small></label><input id="tl" type="tel" autocomplete="tel" maxlength="20">
+<p class="mut" id="nomail" style="margin:.5rem 0 0">Sans mail ni téléphone, on ne pourra pas te répondre : ton message reste quand même lu par le bureau.</p>
+<label style="display:flex;gap:.6rem;align-items:flex-start;font-weight:400;margin-top:1rem"><input type="checkbox" id="okd" style="width:22px;height:22px;flex:none;margin:.1rem 0 0"><span>J’accepte que ces informations soient envoyées à l’amicale pour traiter mon message (et mes photos s’il y en a).<br><small style="color:var(--mut);display:block;margin-top:.3rem;line-height:1.4">🔒 Elles sont <b>chiffrées sur mon téléphone</b> avant l’envoi, puis gardées sur un serveur (Cloudflare) qui <b>ne peut pas les lire</b> : seuls les responsables de l’amicale ont la clé. Elles ne sont <b>ni vendues ni partagées</b>, et je peux demander au bureau de les corriger ou de les supprimer à tout moment. Aucun système n’étant infaillible à 100 %, je n’indique que ce qui est utile.</small></span></label>
+<button class="go" id="go">📨 Envoyer mon message</button>
+<p class="err" id="er" hidden></p>
+<p class="mut" style="margin:.8rem 0 0">🔒 Ton message est chiffré sur ton téléphone : seul le bureau de l’amicale peut le lire.</p>
+</div></div>
+<script>
+(function(){
+var API=(function(d){try{var m=/[?&]s=([^&#]+)/.exec(location.search);if(m){var u=decodeURIComponent(m[1]);if(/^https:\/\/[a-z0-9.-]+(\/[^\s?#]*)?$/i.test(u))return u.replace(/\/+$/,'')}}catch(e){}return d})('');
+var $=function(i){return document.getElementById(i)};
+function b64u(buf){var s='',a=new Uint8Array(buf);for(var i=0;i<a.length;i++)s+=String.fromCharCode(a[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function ub64u(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+var h=(location.hash||'').slice(1).split('.'),ID=h[0]||'',X=h[1]||'',Y=h[2]||'',info={};
+try{info=JSON.parse(new TextDecoder().decode(ub64u(h[3]||'')))}catch(e){}
+if(!/^[0-9a-f]{32}$/.test(ID)||X.length<40||Y.length<40){$('c').innerHTML='<h2>Lien incomplet</h2><p>Ce QR code ou ce lien n’est pas complet. Scanne-le à nouveau ou demande le lien au bureau.</p>';return}
+if(info.g){$('g').textContent=info.g;document.title='Contacter · '+info.g}
+var TY='i',PH=[];
+/* 2.82.143 : photo réduite sur le téléphone (1280 px, JPEG, environ 100 à 150 Ko) puis chiffrée comme le message */
+function shrink(f){return new Promise(function(ok,ko){var u=URL.createObjectURL(f),im=new Image();im.onload=function(){var mx=1280,d='',q=.72;for(var t=0;t<6;t++){var k=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);var g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,c.width,c.height);g.drawImage(im,0,0,c.width,c.height);d=c.toDataURL('image/jpeg',q);if(d.length<=200000)break;mx=Math.round(mx*.8);q=Math.max(.5,q-.05)}URL.revokeObjectURL(u);d.length<=230000?ok(d):ko(new Error('photo trop lourde'))};im.onerror=function(){URL.revokeObjectURL(u);ko(new Error('photo illisible'))};im.src=u})}
+function phDraw(){$('phs').innerHTML=PH.map(function(d,i){return '<div><img alt="Photo '+(i+1)+'" src="'+d+'"><button type="button" data-i="'+i+'" aria-label="Retirer la photo">✕</button></div>'}).join('');$('phb').hidden=PH.length>=2}
+$('phb').onclick=function(){$('phf').click()};
+$('phf').onchange=function(){var f=this.files&&this.files[0];this.value='';if(!f)return;$('phb').textContent='Préparation de la photo…';shrink(f).then(function(d){PH.push(d);phDraw();$('phb').textContent='＋ Ajouter une photo'},function(e){$('phb').textContent='＋ Ajouter une photo';err(e.message)})};
+$('phs').onclick=function(e){var b=e.target.closest('button');if(!b)return;PH.splice(+b.dataset.i,1);phDraw()};
+$('ty').onclick=function(e){var b=e.target.closest('button');if(!b)return;TY=b.dataset.v;[].forEach.call($('ty').children,function(x){x.classList.toggle('on',x===b)});
+ $('x').placeholder=TY==='i'?'Ton idée, ta suggestion…':TY==='q'?'Ta question…':TY==='p'?'Explique le problème…':'Écris ici…'};
+var chk=function(){$('nomail').hidden=!!($('ml').value.trim()||$('tl').value.trim())};$('ml').oninput=chk;$('tl').oninput=chk;
+function err(t){var e=$('er');e.textContent=t;e.hidden=!t}
+var E=function(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+$('go').addEventListener('click',function(){
+ if(!$('okd').checked){err('Coche la case d’accord (en bas) pour envoyer.');try{$('okd').scrollIntoView({block:'center'})}catch(e){}return}
+ var g=function(i){return $(i).value.trim()},x=g('x'),ml=g('ml');
+ if(x.length<3){err('Écris ton message.');return}
+ if(ml&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(ml)){err('Ton mail ne semble pas complet.');return}
+ err('');send({t:'ct',ty:TY,x:x,nm:g('nm'),ml:ml,tl:g('tl'),v:1},$('go'),'📨 Envoyer mon message');
+});
+function send(data,bt,lab){bt.disabled=true;bt.textContent='Envoi…';
+ var S=crypto.subtle,kp,ej;
+ S.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveBits']).then(function(k){kp=k;return S.exportKey('jwk',k.publicKey)}).then(function(j){ej=j;
+  return S.importKey('jwk',{kty:'EC',crv:'P-256',x:X,y:Y,ext:true},{name:'ECDH',namedCurve:'P-256'},false,[])}).then(function(pub){
+  return S.deriveBits({name:'ECDH',public:pub},kp.privateKey,256)}).then(function(bits){
+  var salt=new TextEncoder().encode('agd-qr:'+ID),b=new Uint8Array(bits),all=new Uint8Array(b.length+salt.length);all.set(b);all.set(salt,b.length);
+  return S.digest('SHA-256',all)}).then(function(hk){return S.importKey('raw',hk,'AES-GCM',false,['encrypt'])}).then(function(key){
+  var enc1=function(txt){var iv=crypto.getRandomValues(new Uint8Array(12));return S.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(txt)).then(function(c){return {e:{x:ej.x,y:ej.y},iv:b64u(iv),c:b64u(c)}})};
+  var ids=[],ch=Promise.resolve();
+  PH.forEach(function(d,i){ch=ch.then(function(){bt.textContent='Envoi de la photo '+(i+1)+'…';var pid=Array.from(crypto.getRandomValues(new Uint8Array(8)),function(b){return ('0'+b.toString(16)).slice(-2)}).join('');
+   return enc1(d).then(function(o){o.p=pid;return fetch(API+'/inp/'+ID,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)})}).then(function(r){if(!r.ok)return r.json().then(function(j){throw new Error(j&&j.error||('photo : erreur '+r.status))},function(){throw new Error('photo : erreur '+r.status)});ids.push(pid)})})});
+  return ch.then(function(){bt.textContent='Envoi…';if(ids.length)data.ph=ids;return enc1(JSON.stringify(data))})}).then(function(body){
+  return fetch(API+'/in/'+ID,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}).then(function(r){
+  if(!r.ok)return r.json().then(function(j){throw new Error(j&&j.error||('erreur '+r.status))},function(){throw new Error('erreur '+r.status)});
+  var pn=String(data.nm||'').split(/\s+/)[0];
+  $('c').innerHTML='<div class="ok"><b>💌</b><h2>Merci'+(pn?' '+E(pn):'')+' !</h2><p>Ton message est bien arrivé chez le bureau de l’amicale.</p>'+(data.ml?'<p>On te répond par mail à <strong style="word-break:break-all">'+E(data.ml)+'</strong>.</p>':data.tl?'<p>On te recontacte au <strong>'+E(data.tl)+'</strong>.</p>':'<p>Il sera lu par le bureau.</p>')+(data.ph&&data.ph.length?'<p>📷 '+data.ph.length+' photo'+(data.ph.length>1?'s':'')+' jointe'+(data.ph.length>1?'s':'')+'.</p>':'')+'<button class="go" id="again" style="animation:none">✉️ Écrire un autre message</button></div>';
+  $('again').onclick=function(){location.reload()};window.scrollTo(0,0);fxBoom();
+ }).catch(function(e){bt.disabled=false;bt.textContent=lab;err('Envoi impossible : '+(e&&e.message||'vérifie ta connexion')+'. Réessaie dans un instant.')});
+}
+})();
+</script>
+<script>
+/* animations (2.82.25) : décor selon l'événement (neige à Noël, raisins au Beaujolais, médailles à la Saint-Éloi…), étoile filante, confettis */
+function fxTheme(t,th){t=String(t||'').toLowerCase();th=String(th||'');var R=[
+ ['eloi',/[ée]loi|militaire|c[ée]r[ée]monie|14 juillet|armistice|11 novembre|8 mai|r[ée]giment|prise d.armes|d[ée]fil[ée]/,['🎖️','⭐','✦','🎖️','✦'],['#1d4ed8','#ffffff','#dc2626']],
+ ['vin',/beaujolais|vin\b|vins|vendange|[œo]e?nolog|d[ée]gustation|\bcave\b|ap[ée]ro|ap[ée]ritif/,['🍇','🍷','🥂','🍇','🧀'],0],
+ ['galette',/galette|\brois\b|[ée]piphanie/,['👑','🥧','✨','👑','🥂'],0],
+ ['hallo',/halloween/,['🎃','👻','🦇','🍬','🎃'],0],
+ ['paques',/p[âa]ques/,['🥚','🐣','🌷','🍫','🐰'],0],
+ ['crepe',/chandeleur|cr[êe]pe/,['🥞','✨','🍯','🥞'],0],
+ ['noel',/no[eë]l|r[ée]veillon|hiver|neige|sapin|nouvel an|saint[- ]sylvestre/,['❄','❅','❆','✦'],['#ffffff','#a5b4fc']],
+ ['bbq',/barbecue|bbq|grillade|m[ée]choui|plancha|paella/,['🔥','🍖','🌭','🍉','🍔'],0],
+ ['anniv',/anniversaire|d[ée]part|retraite|mariage|naissance|bapt[êe]me|mutation/,['🎈','🥂','🎉','🎁'],0],
+ ['repas',/casse[- ]?cro[uû]te|midi|d[ée]jeuner|repas|buffet|d[îi]ner|banquet|pique[- ]nique|\bpot\b/,['🥖','🧀','🥪','🍷','☕'],0],
+ ['loto',/loto|tombola|bingo|quine/,['🎱','🍀','🎁','⭐'],0],
+ ['sport',/foot|match|tournoi|sport|course|rando|p[ée]tanque|cross|v[ée]lo|marche/,['🏆','⚽','🥇','🏅'],0],
+ ['disco',/dansante|disco|\bbal\b|\bdj\b|karaok|soir[ée]e/,['🎵','🪩','💃','🕺','✨'],0],
+ ['enfant',/enfant|kid|go[ûu]ter/,['🎈','🧸','🍭','🎨'],0],
+ ['ete',/[ée]t[ée]\b|plage|piscine|juillet|ao[ûu]t|soleil/,['☀️','🌴','🍉','🍦'],0],
+ ['adh',/adh[ée]sion|amicale/,['🎖️','✨','⭐','✨'],0]];
+ var TH={noel:'noel',noelf:'noel',galette:'galette',loto:'loto',lotof:'loto',repas:'repas',bbq:'bbq',hallo:'hallo',disco:'disco',nuit:'disco',sport:'sport',enfants:'enfant',ete:'ete'};
+ for(var k=0;k<R.length;k++)if(R[k][1].test(t))return {k:R[k][0],e:R[k][2],c:R[k][3]};
+ if(TH[th])for(var j=0;j<R.length;j++)if(R[j][0]===TH[th])return {k:R[j][0],e:R[j][2],c:R[j][3]};
+ var m=new Date().getMonth();if(m===11||m===0)return {k:'noel',e:R[6][2],c:R[6][3]};
+ return {k:'fete',e:['✨','🎉','⭐','🎊'],c:['#f59e0b','#ec4899','#8b5cf6','#10b981']}}
+function fxStart(t,th){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var T=fxTheme(t,th),old=document.getElementById('fx');if(old)old.remove();var fx=document.createElement('div');fx.id='fx';var n=window.innerWidth<500?16:26,h='';
+ for(var k=0;k<n;k++){h+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;font-size:'+(T.c?10+Math.random()*16:14+Math.random()*14).toFixed(0)+'px;animation-duration:'+(7+Math.random()*9).toFixed(1)+'s;animation-delay:-'+(Math.random()*14).toFixed(1)+'s;--dx:'+(Math.random()*80-40).toFixed(0)+'px'+(T.c?';color:'+T.c[k%T.c.length]:'')+'">'+T.e[k%T.e.length]+'</i>'}
+ fx.innerHTML=h+'<b></b>';document.body.appendChild(fx)}catch(e){}}
+fxStart('amicale contact');
+function fxBoom(){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var C=['#7c3aed','#db2777','#f59e0b','#10b981','#3b82f6','#ef4444'];for(var k=0;k<90;k++){var d=document.createElement('i');d.className='cf';d.style.left=(Math.random()*100)+'%';d.style.background=C[k%C.length];d.style.animationDelay=(Math.random()*.6)+'s';d.style.setProperty('--dx',(Math.random()*160-80).toFixed(0)+'px');d.style.setProperty('--r',(Math.random()*900-450).toFixed(0)+'deg');document.body.appendChild(d);(function(x){setTimeout(function(){x.remove()},3600)})(d)}}catch(e){}}
+</script>
+<script>
+/* 2.82.168 : page ouverte DANS l’appli installée (iPhone) : pas de bouton retour → on en ajoute un */
+(function(){try{var st=window.navigator.standalone===true||(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches);if(!st)return;
+var b=document.createElement('a');b.href='./';b.id='agd-back';b.textContent='← Retour à l’appli';
+b.setAttribute('style','position:fixed;left:12px;top:12px;top:calc(env(safe-area-inset-top, 0px) + 8px);z-index:99999;background:#ffffff;color:#4c1d95;border:2px solid #7c3aed;border-radius:999px;padding:9px 16px;font:700 16px -apple-system,system-ui,sans-serif;box-shadow:0 2px 12px rgba(0,0,0,.25);text-decoration:none');
+document.body.appendChild(b)}catch(e){}})();
+</script>
+</body>
+</html>

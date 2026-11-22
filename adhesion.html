@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#7c3aed">
+<meta name="robots" content="noindex">
+<title>Adhésion · Asso malin</title>
+<style>
+:root{--ac:#7c3aed;--ac2:#db2777;--bg:#f6f3fb;--card:#fff;--tx:#1f1633;--mut:#6b6280;--line:#e4dcf2}
+@media (prefers-color-scheme:dark){:root{--bg:#120d1f;--card:#1d1630;--tx:#f3eefc;--mut:#b3a8c9;--line:#342a4f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-text-size-adjust:100%}
+.top{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;padding:28px 18px 70px;text-align:center}
+.top small{display:block;opacity:.9;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.8rem}
+.top h1{margin:.3rem 0 .2rem;font:italic 700 1.9rem/1.15 Georgia,"Times New Roman",serif}
+.top p{margin:.2rem 0 0;font-weight:600}
+.wrap{max-width:560px;margin:-50px auto 30px;padding:0 14px}
+.card{background:var(--card);border-radius:20px;padding:18px;box-shadow:0 10px 30px rgba(60,20,120,.15)}
+h2{margin:0 0 .6rem;font-size:1.2rem}
+label{display:block;margin:.65rem 0 .2rem;font-weight:700;font-size:.92rem}
+label small{font-weight:400;color:var(--mut)}
+input,textarea,select{width:100%;font:inherit;font-size:16px;padding:.7rem .8rem;border:1.5px solid var(--line);border-radius:12px;background:transparent;color:var(--tx)}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ac)}
+.row{display:flex;gap:10px}.row>div{flex:1;min-width:0}
+.num{display:flex;align-items:center;gap:8px}.num button{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--tx);font-size:1.4rem;cursor:pointer}.num input{text-align:center;font-weight:800;font-size:1.15rem}
+.seg{display:flex;gap:8px;flex-wrap:wrap}.seg button{flex:1 1 40%;min-width:6rem;padding:.65rem;border-radius:12px;border:1.5px solid var(--line);background:transparent;color:var(--tx);font:inherit;font-weight:700;cursor:pointer}.seg button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.go{display:block;width:100%;margin-top:1.1rem;padding:.95rem;border:0;border-radius:14px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;font:inherit;font-weight:800;font-size:1.08rem;cursor:pointer}
+.go[disabled]{opacity:.6}
+.mut{color:var(--mut);font-size:.85rem}
+.err{color:#c0392b;font-weight:700;margin-top:.6rem}
+.paper{background:#fff;color:#1a1a1a;border-radius:12px;padding:14px 14px 10px;border:1px solid var(--line);max-height:52vh;overflow:auto;font-size:.88rem;line-height:1.4;-webkit-overflow-scrolling:touch}
+.paper .ti{font-weight:900;text-align:center;border:2px solid #1a1a1a;padding:8px;margin:0 0 10px;text-transform:uppercase}
+.paper .ar{font-weight:800;text-decoration:underline;margin:.7rem 0 .2rem}.paper p{margin:.25rem 0}.paper ul{margin:.2rem 0 .2rem 1.1rem;padding:0}
+.bu{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;border-top:1px solid #ddd;padding-top:10px}.bu div{flex:1 1 30%;min-width:90px;text-align:center;font-size:.8rem}.bu u{display:block}.bu img{max-width:100%;height:42px;object-fit:contain}
+.me{border:1.5px solid #1a1a1a;border-radius:8px;padding:8px 10px;margin-top:12px;font-size:.85rem}.me b{font-weight:800}
+.pay{margin:.9rem 0 .2rem;padding:.75rem .9rem;border-radius:14px;background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(219,39,119,.12));font-weight:700}
+.pay big{font-size:1.5rem;font-weight:900;color:var(--ac)}
+#sgc{width:100%;height:auto;aspect-ratio:760/260;background:#fff;border:2px dashed #c4b5fd;border-radius:14px;touch-action:none;display:block;margin-top:.3rem}
+.lnk{background:none;border:0;color:var(--ac);font:inherit;font-weight:700;padding:.4rem 0;cursor:pointer}
+.ok{text-align:center;padding:10px 4px}.ok b{font-size:3rem;display:block}
+
+/* animations (2.82.25) */
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
+#fx i{position:absolute;top:-40px;font-style:normal;opacity:.85;animation:fxFall linear infinite;text-shadow:0 0 6px rgba(255,255,255,.8)}
+@keyframes fxFall{to{transform:translate3d(var(--dx,20px),110vh,0) rotate(360deg)}}
+#fx b{position:absolute;top:8%;left:-30%;width:120px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#fff,#fde68a);box-shadow:0 0 10px #fde68a;transform:rotate(18deg);animation:fxStar 7s ease-in 1.5s infinite}
+@keyframes fxStar{0%{left:-30%;top:4%;opacity:0}8%{opacity:1}22%{left:120%;top:26%;opacity:0}100%{left:120%;top:26%;opacity:0}}
+.top{background-size:220% 220%!important;animation:fxPan 9s ease-in-out infinite}
+@keyframes fxPan{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.top h1{animation:fxPop .9s cubic-bezier(.2,1.6,.4,1) both}.top p,.top small,.top .ev,.top .meta,.top .g{animation:fxUp .8s .25s ease both}
+@keyframes fxPop{0%{transform:scale(.6);opacity:0}100%{transform:none;opacity:1}}@keyframes fxUp{0%{transform:translateY(12px);opacity:0}100%{transform:none;opacity:1}}
+.go{animation:fxGlow 2.4s ease-in-out infinite}@keyframes fxGlow{0%,100%{box-shadow:0 6px 18px rgba(124,58,237,.25)}50%{box-shadow:0 8px 28px rgba(219,39,119,.55)}}
+.ok b{display:inline-block;animation:fxBounce 1s cubic-bezier(.2,1.8,.4,1) both}@keyframes fxBounce{0%{transform:scale(0) rotate(-30deg)}100%{transform:none}}
+.cf{position:fixed;top:-12px;width:9px;height:14px;z-index:60;pointer-events:none;border-radius:2px;animation:fxCf 2.6s cubic-bezier(.3,.6,.5,1) forwards}
+@keyframes fxCf{to{transform:translate3d(var(--dx),105vh,0) rotate(var(--r));opacity:.9}}
+@media (prefers-reduced-motion:reduce){#fx,.cf{display:none}.top,.top h1,.top *,.go,.ok b{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="top"><small id="g"></small><h1 id="t">Adhésion</h1><p id="w"></p></div>
+<div class="wrap"><div class="card" id="c">
+<h2>J’adhère à l’amicale</h2>
+<p class="mut" style="margin:-.2rem 0 .3rem">Remplis tes informations. Ensuite, passe voir le bureau : tu règles ta cotisation et tu signes ton bulletin.</p>
+<div class="row"><div><label for="nm">Nom</label><input id="nm" autocomplete="family-name" maxlength="40"></div><div><label for="pr">Prénom</label><input id="pr" autocomplete="given-name" maxlength="40"></div></div>
+<label for="gr">Grade</label><select id="gr"></select>
+<label for="sv">Service <small>(facultatif)</small></label><input id="sv" maxlength="40">
+<label for="ct">Catégorie</label><select id="ct"></select>
+<label for="tl">Téléphone</label><input id="tl" type="tel" autocomplete="tel" maxlength="20">
+<label for="ml">Mail <small>(facultatif)</small></label><input id="ml" type="email" autocomplete="email" maxlength="80">
+<label id="amq">Étais-tu déjà membre l’an dernier ?</label><div class="seg" id="am"><button type="button" data-v="o">Oui</button><button type="button" data-v="n">Non, c’est nouveau</button></div>
+<label for="rg">Régime ou allergies <small>(facultatif : végétarien, sans porc, allergie aux noix…)</small></label><input id="rg" maxlength="40">
+<label for="mo">Un petit mot <small>(facultatif)</small></label><textarea id="mo" rows="2" maxlength="200"></textarea>
+<label style="display:flex;gap:.6rem;align-items:flex-start;font-weight:400;margin-top:1rem"><input type="checkbox" id="ok" style="width:22px;height:22px;flex:none;margin:.1rem 0 0"><span>J’accepte que ces informations soient envoyées à l’amicale pour gérer mon adhésion et me tenir au courant de ses activités.<br><small style="color:var(--mut);display:block;margin-top:.3rem;line-height:1.4">🔒 Elles sont <b>chiffrées sur mon téléphone</b> avant l’envoi, puis gardées sur un serveur (Cloudflare) qui <b>ne peut pas les lire</b> : seuls les responsables de l’amicale ont la clé. Elles ne sont <b>ni vendues ni partagées</b>, et je peux demander au bureau de les corriger ou de les supprimer à tout moment. Aucun système n’étant infaillible à 100 %, je n’indique que ce qui est utile.</small></span></label>
+<button class="go" id="go">✅ Envoyer ma demande d’adhésion</button>
+<p class="err" id="er" hidden></p>
+<p class="mut" style="margin:.8rem 0 0">🔒 Tes informations sont chiffrées sur ton téléphone : seuls les organisateurs peuvent les lire. Elles servent uniquement à l’amicale.</p>
+</div><div class="card" id="s2" hidden></div></div>
+<script>
+(function(){
+var API=(function(d){try{var m=/[?&]s=([^&#]+)/.exec(location.search);if(m){var u=decodeURIComponent(m[1]);if(/^https:\/\/[a-z0-9.-]+(\/[^\s?#]*)?$/i.test(u))return u.replace(/\/+$/,'')}}catch(e){}return d})('');
+var $=function(i){return document.getElementById(i)};
+function b64u(buf){var s='',a=new Uint8Array(buf);for(var i=0;i<a.length;i++)s+=String.fromCharCode(a[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function ub64u(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+var h=(location.hash||'').slice(1).split('.'),ID=h[0]||'',X=h[1]||'',Y=h[2]||'',info={};
+try{info=JSON.parse(new TextDecoder().decode(ub64u(h[3]||'')))}catch(e){}
+if(!/^[0-9a-f]{32}$/.test(ID)||X.length<40||Y.length<40){$('c').innerHTML='<h2>Lien incomplet</h2><p>Ce QR code ou ce lien d’adhésion n’est pas complet. Scanne-le à nouveau ou demande le lien au bureau.</p>';return}
+if(info.g){$('g').textContent=info.g;document.title='Adhésion · '+info.g}
+$('w').textContent=info.sa?'Saison '+info.sa:'';
+var GR=['Soldat','1re classe','Caporal','Caporal-chef','Sergent','Sergent-chef','Adjudant','Adjudant-chef','Major','Aspirant','Sous-lieutenant','Lieutenant','Capitaine','Commandant','Lieutenant-colonel','Colonel','Général','Civil','Civil cat. B','Civil cat. C','Extérieur'];
+var CT=[['actif','Actif'],['reserv','Réserviste'],['honneur','Membre d’honneur'],['bienf','Bienfaiteur'],['ancien','Ancien'],['autre','Autre']];
+$('gr').innerHTML='<option value="">— choisis —</option>'+GR.map(function(g){return '<option>'+g+'</option>'}).join('');
+$('ct').innerHTML=CT.map(function(c){return '<option value="'+c[0]+'">'+c[1]+'</option>'}).join('');
+var AM='',DOC=null,PY='';
+/* 2.82.29 : le bulletin à lire et signer en ligne (publié par le bureau) */
+try{crypto.subtle.digest('SHA-256',new TextEncoder().encode('agd-aqpub:'+ID)).then(function(hb){var pid=Array.prototype.map.call(new Uint8Array(hb).slice(0,16),function(b){return ('0'+b.toString(16)).slice(-2)}).join('');
+ return fetch(API+'/pub/'+pid+'?t='+Date.now())}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.d&&j.d.t==='adh'){DOC=j.d;$('go').textContent='➡️ Continuer : mon bulletin à signer';var p=document.querySelector('#c .mut');if(p)p.textContent='Remplis tes informations, puis lis ton bulletin et signe-le avec le doigt. Ensuite tu règles ta cotisation (virement ou au bureau).'}}).catch(function(){})}catch(e){}
+document.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+ if(b.parentNode&&b.parentNode.id==='am'){AM=b.dataset.v;[].forEach.call($('am').children,function(x){x.classList.toggle('on',x===b)})}});
+function err(t){var e=$('er');e.textContent=t;e.hidden=!t}
+$('go').addEventListener('click',function(){
+ var g=function(i){return $(i).value.trim()},nm=g('nm'),pr=g('pr'),tl=g('tl');
+ if(!nm||!pr){err('Merci d’écrire ton nom et ton prénom.');return}
+ if(!g('gr')){err('Choisis ton grade (ou « Civil », « Extérieur »).');return}
+ if(!tl&&!g('ml')){err('Laisse un téléphone ou un mail pour qu’on puisse te joindre.');return}
+ if(!$('ok').checked){err('Coche la case d’accord (en bas) pour envoyer.');return}
+ err('');var data={t:'ad',nm:nm,pr:pr,gr:g('gr'),sv:g('sv'),ct:g('ct'),tl:tl,ml:g('ml'),an:AM,rg:g('rg'),mo:g('mo'),ok:1,v:1};
+ if(DOC){step2(data);return}
+ send(data,$('go'),'✅ Envoyer ma demande d’adhésion',null);
+});
+var E=function(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var eur=function(v){var n=+String(v).replace(',','.');return isFinite(n)?(n%1?n.toFixed(2).replace('.',','):String(n))+' €':v};
+function price(d){var p='';if(d.ct&&d.ct!=='actif'&&DOC.tc&&DOC.tc[d.ct]!=null)p=DOC.tc[d.ct];else if(DOC.tg&&DOC.tg[d.gr]!=null)p=DOC.tg[d.gr];else p=DOC.pd||'';return p}
+function regHtml(d){var h='';if(DOC.ti)h+='<div class="ti">'+E(DOC.ti).replace(/\n/g,'<br>')+'</div>';
+ var tx=String(DOC.tx||'').trim();
+ if(tx){var ul=null,fl=function(){if(ul){h+='<ul>'+ul+'</ul>';ul=null}};tx.split(/\r?\n/).forEach(function(l){var t=l.trim();if(/^\[page\]$/i.test(t)){fl();return}if(!t){fl();h+='<div style="height:6px"></div>';return}var li=t.match(/^[-•–]\s*(.*)$/);if(li){ul=(ul||'')+'<li>'+E(li[1])+'</li>';return}fl();h+=/^article\b/i.test(t)?'<p class="ar">'+E(t)+'</p>':'<p>'+E(t)+'</p>'});fl()}
+ else{h+='<p>'+E(String(DOC.intro||'').replace(/\{nom\}/g,d.pr+' '+d.nm).replace(/\{grade\}/g,d.gr).replace(/\{asso\}/g,DOC.g||'l’amicale').replace(/\{annee\}/g,String(new Date().getFullYear())))+'</p>';var cl=String(DOC.cl||'').split(/\r?\n/).filter(Boolean);if(cl.length)h+='<ul>'+cl.map(function(x){return '<li>'+E(x)+'</li>'}).join('')+'</ul>'}
+ var bu=(DOC.bu||[]).slice().sort(function(a,b){return (a.l-b.l)||(a.c-b.c)});if(bu.length)h+='<div class="bu">'+bu.map(function(x){return '<div><u>'+E(x.r)+'</u>'+E(x.n)+(x.s&&/^data:image\/(png|jpeg);base64,/.test(x.s)?'<br><img src="'+x.s+'" alt="">':'')+'</div>'}).join('')+'</div>';
+ h+='<div class="me">Grade : <b>'+E(d.gr)+'</b> · Prénom : <b>'+E(d.pr)+'</b> · Nom : <b>'+E(String(d.nm).toUpperCase())+'</b>'+(d.sv?' · Service : <b>'+E(d.sv)+'</b>':'')+'<br>'+E(DOC.ac||'Accepte le présent document en tant qu’adhérent.')+'<br>Pris connaissance le : <b>'+new Date().toLocaleDateString('fr-FR')+'</b></div>';
+ if(DOC.rgpd)h+='<div style="border:1px solid #999;border-radius:8px;padding:7px 10px;margin-top:10px;font-size:.8rem;line-height:1.4;color:#222;white-space:pre-wrap">🔒 '+E(DOC.rgpd)+'</div>';
+ return h}
+var ST=[],cur=null;
+function step2(d){var p=price(d);PY='';$('c').hidden=true;var s=$('s2');s.hidden=false;
+ s.innerHTML='<h2>📝 Mon bulletin '+E(DOC.sa||'')+'</h2><p class="mut" style="margin:-.2rem 0 .5rem">Lis-le (fais défiler), puis signe en bas avec le doigt.</p><div class="paper">'+regHtml(d)+'</div>'+
+  '<div class="pay">💶 Ma cotisation : '+(p!==''?'<big>'+E(eur(p))+'</big><br><small style="font-weight:600;opacity:.8">Le bureau vérifie le montant et te prévient s’il faut le corriger.</small>':'<span>le bureau t’indiquera le montant</span>')+'</div>'+
+  '<label>Je règle par</label><div class="seg" id="py"><button type="button" data-v="vir">🏦 Virement</button><button type="button" data-v="cb">💳 Carte (SumUp)</button><button type="button" data-v="chq">🧾 Chèque</button><button type="button" data-v="esp">💶 Espèces</button></div><p class="mut" id="pyx" style="margin:.4rem 0 0"></p>'+
+  '<label style="display:flex;gap:.6rem;align-items:flex-start;font-weight:400;margin-top:1rem"><input type="checkbox" id="lu" style="width:22px;height:22px;flex:none;margin:0"><span>J’ai lu le règlement et je l’accepte.</span></label>'+
+  '<label>✍️ Ma signature</label><canvas id="sgc" width="760" height="260"></canvas><button type="button" class="lnk" id="sgx">🧽 Effacer et recommencer</button>'+
+  '<button class="go" id="go2">✍️ Signer et envoyer</button><p class="err" id="er2" hidden></p><button type="button" class="lnk" id="back">← Modifier mes informations</button>';
+ window.scrollTo(0,0);
+ var cv=$('sgc'),g=cv.getContext('2d');g.lineWidth=4.5;g.lineCap='round';g.lineJoin='round';g.strokeStyle='#111';ST=[];
+ var pt=function(e){var r=cv.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return [Math.max(0,Math.min(759,(t.clientX-r.left)*760/r.width)),Math.max(0,Math.min(259,(t.clientY-r.top)*260/r.height))]};
+ var down=function(e){e.preventDefault();var x2=$('er2');if(x2)x2.hidden=true;var q=pt(e);cur=[q];ST.push(cur);g.beginPath();g.moveTo(q[0],q[1]);g.lineTo(q[0]+.1,q[1]+.1);g.stroke()};
+ var move=function(e){if(!cur)return;e.preventDefault();var q=pt(e);cur.push(q);g.lineTo(q[0],q[1]);g.stroke()};
+ var up=function(){cur=null};
+ cv.addEventListener('pointerdown',down);cv.addEventListener('pointermove',move);window.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+ $('sgx').onclick=function(){g.clearRect(0,0,760,260);ST=[]};
+ $('back').onclick=function(){s.hidden=true;$('c').hidden=false;window.scrollTo(0,0)};
+ $('py').onclick=function(e){var b=e.target.closest('button');if(!b)return;PY=b.dataset.v;[].forEach.call($('py').children,function(x){x.classList.toggle('on',x===b)});
+  $('pyx').textContent=PY==='vir'?'Fais ton virement en indiquant « Adhésion '+String(d.nm).toUpperCase()+' '+d.pr+' ». Demande le RIB à un membre du bureau.':PY==='cb'?'Tu paieras par carte bancaire à un membre du bureau, avec le terminal SumUp.':PY==='chq'?'Tu donneras ton chèque à un membre du bureau (à l’ordre de l’amicale).':'Tu donneras tes espèces à un membre du bureau.'};
+ $('go2').onclick=function(){var e2=function(t){var x=$('er2');x.textContent=t;x.hidden=!t};
+  if(!PY){e2('Choisis comment tu règles : virement, carte, chèque ou espèces.');return}
+  if(!$('lu').checked){e2('Coche « J’ai lu le règlement et je l’accepte ».');return}
+  var n=0;ST.forEach(function(x){n+=x.length});if(n<8){e2('Signe dans le cadre avec ton doigt.');return}
+  var d2={};for(var k in d)d2[k]=d[k];d2.py=PY;d2.pa=String(p);d2.sa=DOC.sa||'';d2.v=2;
+  var tol=2.5,ok=false;for(var i=0;i<14;i++){d2.sg=enc(tol);if(new TextEncoder().encode(JSON.stringify(d2)).length<=2750){ok=true;break}tol*=1.35}
+  if(!ok){e2('Ta signature est trop longue à envoyer : recommence-la un peu plus simple.');return}
+  e2('');send(d2,$('go2'),'✍️ Signer et envoyer',{p:p,py:PY,pt:DOC.pt,nm:d.nm,pr:d.pr})};
+}
+function enc(tol){var A='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';return ST.map(function(st){var out='',lx=-99,ly=-99;st.forEach(function(q,i){if(i&&i<st.length-1&&Math.abs(q[0]-lx)+Math.abs(q[1]-ly)<tol)return;lx=q[0];ly=q[1];var v=(Math.round(q[0]/2)<<8)|Math.round(q[1]/2);out+=A[(v>>12)&63]+A[(v>>6)&63]+A[v&63]});return out}).filter(Boolean).join('.')}
+/* 2.82.143 : à la fin, rejoindre le groupe WhatsApp de l'amicale (lien collé par le bureau dans l'appli) */
+function waBlock(){if(!DOC||!/^https:\/\/chat\.whatsapp\.com\/[A-Za-z0-9]{10,40}$/.test(DOC.wa||''))return '';var mob=false;try{mob=matchMedia('(pointer:coarse)').matches}catch(e){}
+ return '<div style="margin:1.1rem 0 .3rem;padding:.9rem;border-radius:16px;background:rgba(37,211,102,.12);border:2px solid #25D366;text-align:center"><p style="margin:0 0 .5rem;font-weight:800">💬 Mets-toi dans le groupe WhatsApp de l’amicale pour connaître toutes les infos !</p>'+
+  '<a href="'+E(DOC.wa)+'" target="_blank" rel="noopener" style="display:block;padding:.9rem;border-radius:14px;background:#25D366;color:#fff;font-weight:800;font-size:1.05rem;text-decoration:none">💬 Rejoindre le groupe WhatsApp</a>'+
+  (!mob&&/^data:image\/png;base64,/.test(DOC.waq||'')?'<img alt="QR code du groupe WhatsApp" src="'+DOC.waq+'" style="width:190px;max-width:70%;margin:.8rem auto .2rem;display:block;background:#fff;border-radius:10px"><p class="mut" style="margin:0">Sur ordinateur : scanne ce QR code avec ton téléphone.</p>':'')+'</div>'}
+function send(data,bt,lab,sig){bt.disabled=true;bt.textContent='Envoi…';var pr=data.pr;
+ var S=crypto.subtle,kp,ej;
+ S.generateKey({name:'ECDH',namedCurve:'P-256'},true,['deriveBits']).then(function(k){kp=k;return S.exportKey('jwk',k.publicKey)}).then(function(j){ej=j;
+  return S.importKey('jwk',{kty:'EC',crv:'P-256',x:X,y:Y,ext:true},{name:'ECDH',namedCurve:'P-256'},false,[])}).then(function(pub){
+  return S.deriveBits({name:'ECDH',public:pub},kp.privateKey,256)}).then(function(bits){
+  var salt=new TextEncoder().encode('agd-qr:'+ID),b=new Uint8Array(bits),all=new Uint8Array(b.length+salt.length);all.set(b);all.set(salt,b.length);
+  return S.digest('SHA-256',all)}).then(function(hk){return S.importKey('raw',hk,'AES-GCM',false,['encrypt'])}).then(function(key){
+  var iv=crypto.getRandomValues(new Uint8Array(12));return S.encrypt({name:'AES-GCM',iv:iv},key,new TextEncoder().encode(JSON.stringify(data))).then(function(c){return {e:{x:ej.x,y:ej.y},iv:b64u(iv),c:b64u(c)}})}).then(function(body){
+  return fetch(API+'/in/'+ID,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}).then(function(r){
+  if(!r.ok)return r.json().then(function(j){throw new Error(j&&j.error||('erreur '+r.status))},function(){throw new Error('erreur '+r.status)});
+  var box=sig?$('s2'):$('c');
+  box.innerHTML=sig?'<div class="ok"><b>🎉</b><h2>Bienvenue à l’amicale !</h2><p>Merci '+E(pr)+'. Ton bulletin signé est bien arrivé chez le bureau.</p>'+
+   '<div class="pay" style="text-align:left">'+(sig.py==='vir'?'🏦 <strong>Dernière étape :</strong> fais ton virement'+(sig.p!==''?' de <big>'+E(eur(sig.p))+'</big>':'')+' en indiquant « Adhésion '+E(String(sig.nm).toUpperCase()+' '+sig.pr)+' ». Demande le RIB à un membre du bureau.':'🤝 <strong>Dernière étape :</strong> passe voir un membre du bureau pour régler'+(sig.p!==''?' <big>'+E(eur(sig.p))+'</big>':' ta cotisation')+' '+({cb:'par carte (SumUp)',chq:'par chèque',esp:'en espèces'}[sig.py]||'')+'.')+'</div>'+
+   (sig.pt?'<p style="font-size:1.1rem;margin-top:1rem">🎁 <strong>Ton patch de bienvenue t’attend !</strong><br>Passe le récupérer auprès du bureau.</p>':'')+waBlock()+'</div>'
+   :'<div class="ok"><b>🎉</b><h2>C’est envoyé !</h2><p>Merci '+E(pr)+'. Ta demande d’adhésion est bien arrivée chez le bureau.</p><p><strong>Dernière étape :</strong> passe voir le bureau pour régler ta cotisation et signer ton bulletin. Tout sera déjà rempli.</p>'+waBlock()+'</div>';
+  box.hidden=false;window.scrollTo(0,0);fxBoom();
+ }).catch(function(e){bt.disabled=false;bt.textContent=lab;var m='Envoi impossible : '+(e&&e.message||'vérifie ta connexion')+'. Réessaie dans un instant.';if(sig){var x=$('er2');x.textContent=m;x.hidden=false}else err(m)});
+}
+})();
+</script>
+<script>
+/* animations (2.82.25) : décor selon l'événement (neige à Noël, raisins au Beaujolais, médailles à la Saint-Éloi…), étoile filante, confettis */
+function fxTheme(t,th){t=String(t||'').toLowerCase();th=String(th||'');var R=[
+ ['eloi',/[ée]loi|militaire|c[ée]r[ée]monie|14 juillet|armistice|11 novembre|8 mai|r[ée]giment|prise d.armes|d[ée]fil[ée]/,['🎖️','⭐','✦','🎖️','✦'],['#1d4ed8','#ffffff','#dc2626']],
+ ['vin',/beaujolais|vin\b|vins|vendange|[œo]e?nolog|d[ée]gustation|\bcave\b|ap[ée]ro|ap[ée]ritif/,['🍇','🍷','🥂','🍇','🧀'],0],
+ ['galette',/galette|\brois\b|[ée]piphanie/,['👑','🥧','✨','👑','🥂'],0],
+ ['hallo',/halloween/,['🎃','👻','🦇','🍬','🎃'],0],
+ ['paques',/p[âa]ques/,['🥚','🐣','🌷','🍫','🐰'],0],
+ ['crepe',/chandeleur|cr[êe]pe/,['🥞','✨','🍯','🥞'],0],
+ ['noel',/no[eë]l|r[ée]veillon|hiver|neige|sapin|nouvel an|saint[- ]sylvestre/,['❄','❅','❆','✦'],['#ffffff','#a5b4fc']],
+ ['bbq',/barbecue|bbq|grillade|m[ée]choui|plancha|paella/,['🔥','🍖','🌭','🍉','🍔'],0],
+ ['anniv',/anniversaire|d[ée]part|retraite|mariage|naissance|bapt[êe]me|mutation/,['🎈','🥂','🎉','🎁'],0],
+ ['repas',/casse[- ]?cro[uû]te|midi|d[ée]jeuner|repas|buffet|d[îi]ner|banquet|pique[- ]nique|\bpot\b/,['🥖','🧀','🥪','🍷','☕'],0],
+ ['loto',/loto|tombola|bingo|quine/,['🎱','🍀','🎁','⭐'],0],
+ ['sport',/foot|match|tournoi|sport|course|rando|p[ée]tanque|cross|v[ée]lo|marche/,['🏆','⚽','🥇','🏅'],0],
+ ['disco',/dansante|disco|\bbal\b|\bdj\b|karaok|soir[ée]e/,['🎵','🪩','💃','🕺','✨'],0],
+ ['enfant',/enfant|kid|go[ûu]ter/,['🎈','🧸','🍭','🎨'],0],
+ ['ete',/[ée]t[ée]\b|plage|piscine|juillet|ao[ûu]t|soleil/,['☀️','🌴','🍉','🍦'],0],
+ ['adh',/adh[ée]sion|amicale/,['🎖️','✨','⭐','✨'],0]];
+ var TH={noel:'noel',noelf:'noel',galette:'galette',loto:'loto',lotof:'loto',repas:'repas',bbq:'bbq',hallo:'hallo',disco:'disco',nuit:'disco',sport:'sport',enfants:'enfant',ete:'ete'};
+ for(var k=0;k<R.length;k++)if(R[k][1].test(t))return {k:R[k][0],e:R[k][2],c:R[k][3]};
+ if(TH[th])for(var j=0;j<R.length;j++)if(R[j][0]===TH[th])return {k:R[j][0],e:R[j][2],c:R[j][3]};
+ var m=new Date().getMonth();if(m===11||m===0)return {k:'noel',e:R[6][2],c:R[6][3]};
+ return {k:'fete',e:['✨','🎉','⭐','🎊'],c:['#f59e0b','#ec4899','#8b5cf6','#10b981']}}
+function fxStart(t,th){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var T=fxTheme(t,th),old=document.getElementById('fx');if(old)old.remove();var fx=document.createElement('div');fx.id='fx';var n=window.innerWidth<500?16:26,h='';
+ for(var k=0;k<n;k++){h+='<i style="left:'+(Math.random()*100).toFixed(1)+'%;font-size:'+(T.c?10+Math.random()*16:14+Math.random()*14).toFixed(0)+'px;animation-duration:'+(7+Math.random()*9).toFixed(1)+'s;animation-delay:-'+(Math.random()*14).toFixed(1)+'s;--dx:'+(Math.random()*80-40).toFixed(0)+'px'+(T.c?';color:'+T.c[k%T.c.length]:'')+'">'+T.e[k%T.e.length]+'</i>'}
+ fx.innerHTML=h+'<b></b>';document.body.appendChild(fx)}catch(e){}}
+fxStart('adhésion '+document.title);
+function fxBoom(){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var C=['#7c3aed','#db2777','#f59e0b','#10b981','#3b82f6','#ef4444'];for(var k=0;k<90;k++){var d=document.createElement('i');d.className='cf';d.style.left=(Math.random()*100)+'%';d.style.background=C[k%C.length];d.style.animationDelay=(Math.random()*.6)+'s';d.style.setProperty('--dx',(Math.random()*160-80).toFixed(0)+'px');d.style.setProperty('--r',(Math.random()*900-450).toFixed(0)+'deg');document.body.appendChild(d);(function(x){setTimeout(function(){x.remove()},3600)})(d)}}catch(e){}}
+</script>
+<script>
+/* 2.82.168 : page ouverte DANS l’appli installée (iPhone) : pas de bouton retour → on en ajoute un */
+(function(){try{var st=window.navigator.standalone===true||(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches);if(!st)return;
+var b=document.createElement('a');b.href='./';b.id='agd-back';b.textContent='← Retour à l’appli';
+b.setAttribute('style','position:fixed;left:12px;top:12px;top:calc(env(safe-area-inset-top, 0px) + 8px);z-index:99999;background:#ffffff;color:#4c1d95;border:2px solid #7c3aed;border-radius:999px;padding:9px 16px;font:700 16px -apple-system,system-ui,sans-serif;box-shadow:0 2px 12px rgba(0,0,0,.25);text-decoration:none');
+document.body.appendChild(b)}catch(e){}})();
+</script>
+<script>var AMW=(function(){try{var m=/[?&]w=([^&#]+)/.exec(location.search);var o=JSON.parse(decodeURIComponent(m[1]));return o&&typeof o==='object'?o:{}}catch(e){return {}}})();function amw(k,d){var v=AMW[k];return typeof v==='string'&&v.trim()?v.trim().slice(0,40):d}function amwc(k,d){var v=amw(k,d);return v.charAt(0).toUpperCase()+v.slice(1)}var aq=document.getElementById('amq');if(aq){aq.textContent='Étais-tu déjà '+amw('s','membre')+' l’an dernier ?';}</script></body>
+</html>

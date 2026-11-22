@@ -1,0 +1,342 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Installer mon serveur · Asso malin</title><link rel="icon" href="icons/icon.svg"><style>
+:root{--v:#5b21b6;--v2:#7c3aed;--or:#f5b301;--bg:#faf7ff;--t:#1d1530;--m:#6b6480;--ok:#16a34a}
+*{box-sizing:border-box}body{margin:0;font:17px/1.55 -apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--t)}
+.w{max-width:760px;margin:0 auto;padding:16px 16px 70px}
+.hero{text-align:center;padding:10px 0 4px}.hero img{width:min(260px,70%);height:auto}
+h1{font-size:1.6rem;margin:.3rem 0}h2{font-size:1.25rem;margin:0 0 .4rem}
+.mut{color:var(--m);font-size:.95rem}
+.tabs{display:flex;gap:8px;margin:14px 0}.tabs button{flex:1;padding:12px 8px;border-radius:14px;border:2px solid var(--v2);background:#fff;color:var(--v);font:inherit;font-weight:700;cursor:pointer}
+.tabs button.on{background:var(--v2);color:#fff}
+ol.st{list-style:none;counter-reset:s;padding:0;margin:0}
+.step{counter-increment:s;background:#fff;border:1px solid #e4dcf7;border-radius:16px;padding:14px 14px 12px 14px;margin:12px 0;box-shadow:0 2px 8px #5b21b611}
+.step[hidden]{display:none}
+.step>h2::before{content:counter(s);display:inline-grid;place-items:center;width:1.8em;height:1.8em;border-radius:50%;background:var(--v2);color:#fff;font-size:.9em;margin-right:.5em}
+.step p,.step ul{margin:.35rem 0}.step ul{padding-left:1.2rem}
+.tip{background:#fff8dc;border-left:4px solid var(--or);padding:8px 10px;border-radius:8px;margin:.5rem 0;font-size:.95rem}
+.ok{background:#e8f8ee;border-left:4px solid var(--ok);padding:8px 10px;border-radius:8px;margin:.5rem 0;font-size:.95rem}
+a.b,button.b{display:inline-block;background:var(--v2);color:#fff;text-decoration:none;border:0;border-radius:12px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer;margin:.3rem .3rem .3rem 0}
+button.b.alt{background:#fff;color:var(--v);border:2px solid var(--v2)}
+code,.cp{background:#f1ecfb;border-radius:6px;padding:1px 6px;font-family:ui-monospace,Menlo,monospace;font-size:.92em;word-break:break-all}
+.cp{display:block;padding:8px 10px;margin:.4rem 0;user-select:all}
+textarea{width:100%;height:170px;font:12px/1.35 ui-monospace,Menlo,monospace;border:1px solid #d9cff3;border-radius:10px;padding:8px}
+details{margin:.4rem 0}summary{cursor:pointer;font-weight:700;color:var(--v)}
+footer{text-align:center;color:var(--m);font-size:.85rem;margin-top:26px}
+</style></head><body><div class="w"><div class="hero"><img src="icons/logo.png" alt="Asso malin"><h1>Installer ton Asso malin</h1><p class="mut">Guide pas à pas, sans rien savoir en informatique. Compte une heure, une seule fois. Tout est <b>gratuit</b> pour un groupe comme le tien.</p></div><p>Au bout de ce guide, tu auras <b>ta propre appli</b> (à ton adresse) et <b>ton propre serveur</b> : tes données sont chez toi, chiffrées, et personne d’autre n’en dépend. Tu peux aussi <a href="./?demo=1">voir une démo</a> avant de te lancer.</p><div class="tabs"><button id="ta" class="on">Je n’ai rien<br><small>ni GitHub, ni Cloudflare</small></button><button id="tb">J’ai déjà<br><small>GitHub et Cloudflare</small></button></div><ol class="st" id="st"><li class="step" data-f="a"><h2>Créer ton compte GitHub</h2><p>GitHub est le « garage » où ton appli sera rangée. C’est gratuit.</p><ul><li>Va sur <a class="b" href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a></li><li>Entre ton e-mail, un mot de passe, un <b>nom d’utilisateur</b> (il apparaîtra dans l’adresse de ton appli : choisis-le court, par exemple le nom de ton club).</li><li>Confirme avec le code reçu par e-mail.</li></ul><div class="tip">Note ton nom d’utilisateur : on l’appelle <b>TONNOM</b> dans ce guide.</div></li><li class="step" data-f="ab"><h2>Copier l’appli dans ton GitHub (« fork »)</h2><p>Tu fais ta propre copie d’Asso malin. Elle sera à toi, personne ne peut la modifier.</p><ul><li>Ouvre <a class="b" href="https://github.com/dam-cigogne/asso-malin" target="_blank" rel="noopener">github.com/dam-cigogne/asso-malin</a></li><li>Touche le bouton <b>Fork</b> (en haut à droite), puis <b>Create fork</b>.</li><li>Tu arrives dans <code>github.com/TONNOM/asso-malin</code> : c’est ta copie.</li></ul></li><li class="step" data-f="ab"><h2>Mettre l’appli en ligne (« Pages »)</h2><ul><li>Dans ta copie, touche <b>Settings</b> (Paramètres), puis <b>Pages</b> dans la colonne de gauche.</li><li>Sous <b>Source</b> : « Deploy from a branch ». Sous <b>Branch</b> : choisis <b>main</b> et <b>/ (root)</b>, puis <b>Save</b>.</li><li>Attends 1 à 2 minutes et rafraîchis : l’adresse de ton appli apparaît.</li></ul><div class="ok">Ton appli est à l’adresse <code>https://TONNOM.github.io/asso-malin/</code></div><div class="tip">Ouvre-la : elle marche déjà, mais il lui faut encore un serveur pour partager le groupe entre téléphones. C’est la suite.</div></li><li class="step" data-f="a"><h2>Créer ton compte Cloudflare</h2><p>Cloudflare héberge ton « serveur » : une petite boîte aux lettres chiffrée entre les téléphones du groupe. Gratuit, sans carte bancaire.</p><ul><li>Va sur <a class="b" href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">dash.cloudflare.com/sign-up</a></li><li>Entre ton e-mail et un mot de passe, confirme l’e-mail reçu.</li><li>Si on te propose un abonnement, choisis toujours <b>Free / Gratuit</b>.</li></ul></li><li class="step" data-f="ab"><h2>Créer la base de données</h2><ul><li>Dans Cloudflare, menu de gauche : <b>Stockage et bases de données</b> (Storage &amp; databases) › <b>D1 SQL Database</b>.</li><li><b>Créer une base de données</b> (Create database). Nom : <code>asso-malin-db</code>. Valide.</li></ul><div class="tip">Les noms des menus changent de temps en temps. Si tu ne trouves pas exactement le même, cherche le mot « D1 ».</div></li><li class="step" data-f="ab"><h2>Créer le serveur (« Worker »)</h2><ul><li>Menu : <b>Calcul</b> / <b>Workers &amp; Pages</b> › <b>Créer</b> › <b>Créer un Worker</b>.</li><li>Nom : <code>asso-malin</code> (ou ce que tu veux). Touche <b>Déployer</b> (Deploy).</li><li>Puis <b>Modifier le code</b> (Edit code). Efface tout ce qu’il y a dans la fenêtre, et <b>colle le code ci-dessous</b>. Touche <b>Déployer</b>.</li></ul><button class="b" id="cpw">📋 Copier le code du serveur</button><details><summary>Voir le code</summary><textarea id="wk" readonly>// Asso malin · boîte aux lettres chiffrée : boîte aux lettres chiffrée.
+// Le serveur ne stocke que des données chiffrées sur les téléphones (AES-GCM) : il ne peut pas les lire.
+// Espace = 32 caractères hexadécimaux dérivés de la clé familiale (la clé, elle, ne quitte jamais les téléphones).
+// Stockage : base D1 (liaison « DB »), beaucoup plus généreuse en gratuit que KV. Les anciennes données KV (liaison « FAM »)
+// sont recopiées une seule fois par espace dans D1. Sans liaison DB, le serveur continue en KV comme avant.
+// --- Notifications (Web Push, sans contenu : le serveur ne lit rien). Secrets : VAPID_PRIVATE (JWK), VAPID_PUBLIC. ---
+const b64u=b=&gt;btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,&#x27;-&#x27;).replace(/\//g,&#x27;_&#x27;).replace(/=+$/,&#x27;&#x27;);
+const enc=s=&gt;new TextEncoder().encode(s);
+async function vapidAuth(env,endpoint){
+  const aud=new URL(endpoint).origin;
+  const h=b64u(enc(JSON.stringify({typ:&#x27;JWT&#x27;,alg:&#x27;ES256&#x27;}))),p=b64u(enc(JSON.stringify({aud,exp:Math.floor(Date.now()/1000)+43200,sub:(env.VAPID_SUB||&#x27;mailto:contact@example.com&#x27;)})));
+  const key=await crypto.subtle.importKey(&#x27;jwk&#x27;,JSON.parse(env.VAPID_PRIVATE),{name:&#x27;ECDSA&#x27;,namedCurve:&#x27;P-256&#x27;},false,[&#x27;sign&#x27;]);
+  const sig=await crypto.subtle.sign({name:&#x27;ECDSA&#x27;,hash:&#x27;SHA-256&#x27;},key,enc(h+&#x27;.&#x27;+p));
+  return &#x27;vapid t=&#x27;+h+&#x27;.&#x27;+p+&#x27;.&#x27;+b64u(sig)+&#x27;, k=&#x27;+env.VAPID_PUBLIC;
+}
+const unb64=s=&gt;Uint8Array.from(atob(s.replace(/-/g,&#x27;+&#x27;).replace(/_/g,&#x27;/&#x27;)),c=&gt;c.charCodeAt(0));
+async function hkdf(salt,ikm,info,len){const k=await crypto.subtle.importKey(&#x27;raw&#x27;,ikm,&#x27;HKDF&#x27;,false,[&#x27;deriveBits&#x27;]);return new Uint8Array(await crypto.subtle.deriveBits({name:&#x27;HKDF&#x27;,hash:&#x27;SHA-256&#x27;,salt,info},k,len*8))}
+// Chiffrement du message pour le téléphone (RFC 8291, aes128gcm)
+async function encPayload(p256dh,auth,text){
+  const ua=unb64(p256dh),au=unb64(auth),salt=crypto.getRandomValues(new Uint8Array(16));
+  const kp=await crypto.subtle.generateKey({name:&#x27;ECDH&#x27;,namedCurve:&#x27;P-256&#x27;},true,[&#x27;deriveBits&#x27;]);
+  const asPub=new Uint8Array(await crypto.subtle.exportKey(&#x27;raw&#x27;,kp.publicKey));
+  const uaKey=await crypto.subtle.importKey(&#x27;raw&#x27;,ua,{name:&#x27;ECDH&#x27;,namedCurve:&#x27;P-256&#x27;},false,[]);
+  const secret=new Uint8Array(await crypto.subtle.deriveBits({name:&#x27;ECDH&#x27;,public:uaKey},kp.privateKey,256));
+  const cat=(...a)=&gt;{const o=new Uint8Array(a.reduce((n,x)=&gt;n+x.length,0));let i=0;for(const x of a){o.set(x,i);i+=x.length}return o};
+  const prk=await hkdf(au,secret,cat(enc(&#x27;WebPush: info\0&#x27;),ua,asPub),32);
+  const cek=await hkdf(salt,prk,enc(&#x27;Content-Encoding: aes128gcm\0&#x27;),16),nonce=await hkdf(salt,prk,enc(&#x27;Content-Encoding: nonce\0&#x27;),12);
+  const key=await crypto.subtle.importKey(&#x27;raw&#x27;,cek,&#x27;AES-GCM&#x27;,false,[&#x27;encrypt&#x27;]);
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:&#x27;AES-GCM&#x27;,iv:nonce},key,cat(enc(text),new Uint8Array([2]))));
+  return cat(salt,new Uint8Array([0,0,16,0,65]),asPub,ct);
+}
+async function sendOne(env,x,msg){
+  try{
+    const body=await encPayload(x.p,x.a,JSON.stringify(msg));
+    const res=await fetch(x.endpoint,{method:&#x27;POST&#x27;,headers:{Authorization:await vapidAuth(env,x.endpoint),TTL:&#x27;86400&#x27;,Urgency:&#x27;normal&#x27;,&#x27;Content-Encoding&#x27;:&#x27;aes128gcm&#x27;,&#x27;Content-Type&#x27;:&#x27;application/octet-stream&#x27;},body});
+    if(res.status===404||res.status===410){await env.DB.prepare(&#x27;DELETE FROM push3 WHERE endpoint = ?&#x27;).bind(x.endpoint).run();return &#x27;gone&#x27;}
+    return res.ok?&#x27;ok&#x27;:String(res.status);
+  }catch(e){return String(e).slice(0,80)}
+}
+// Test : envoyé à tous les téléphones du groupe, sans règle
+async function pushTest(env,space){
+  const r=await env.DB.prepare(&#x27;SELECT endpoint, p, a FROM push3 WHERE space = ?&#x27;).bind(space).all();let ok=0;const err=[];
+  for(const x of (r.results||[])){const s=await sendOne(env,x,{t:&#x27;✅ Test réussi&#x27;,b:&#x27;Les notifications fonctionnent sur ce téléphone 🎉&#x27;,g:&#x27;agd-test&#x27;});if(s===&#x27;ok&#x27;)ok++;else err.push(s)}
+  return {ok,err};
+}
+// Vraie notification : jamais pour ses propres appareils, seulement pour le destinataire, une pour chaque modification
+async function notify(env,space,o){
+  const r=await env.DB.prepare(&#x27;SELECT endpoint, me, pf, p, a, last, n FROM push3 WHERE space = ?&#x27;).bind(space).all();const now=Date.now();const jobs=[];
+  for(const x of (r.results||[])){
+    if(x.endpoint===o.selfEp||o.skip.includes(x.me))continue;
+    if(o.to&amp;&amp;x.me!==o.to)continue;
+    if(x.pf){const pq=x.pf.split(&#x27;!&#x27;);if(!pq[0].includes(o.kind))continue;if(o.kind===&#x27;i&#x27;&amp;&amp;o.hint&amp;&amp;pq[1]&amp;&amp;pq[1].split(&#x27;,&#x27;).includes(o.hint))continue}
+    if(o.kind===&#x27;i&#x27;&amp;&amp;!o.hint)continue;
+    if(o.kind===&#x27;i&#x27;){jobs.push((async()=&gt;{
+      if(!PEND_OK){await env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS pend (endpoint TEXT, space TEXT, by TEXT, h TEXT, d TEXT)&#x27;).run();PEND_OK=1}
+      await env.DB.prepare(&#x27;INSERT INTO pend (endpoint, space, by, h, d) VALUES (?, ?, ?, ?, ?)&#x27;).bind(x.endpoint,space,o.by,o.hint,o.det||&#x27;&#x27;).run();
+      await new Promise(rs=&gt;setTimeout(rs,6000));
+      const c=await env.DB.prepare(&#x27;DELETE FROM pend WHERE endpoint = ? AND space = ? RETURNING by, h, d&#x27;).bind(x.endpoint,space).all();
+      const rows=c.results||[];if(!rows.length)return;
+      await env.DB.prepare(&#x27;UPDATE push3 SET last = ? WHERE endpoint = ? AND space = ?&#x27;).bind(Date.now(),x.endpoint,space).run();
+      const m=amMsg(rows);await sendOne(env,x,{t:m.t,b:m.b,g:&#x27;agd-i&#x27;});
+    })());continue}
+    if(now-x.last&lt;0){await env.DB.prepare(&#x27;UPDATE push3 SET n = n + 1 WHERE endpoint = ? AND space = ?&#x27;).bind(x.endpoint,space).run();continue}
+    const tot=x.n+1;
+    await env.DB.prepare(&#x27;UPDATE push3 SET last = ?, n = 0 WHERE endpoint = ? AND space = ?&#x27;).bind(now,x.endpoint,space).run();
+    const H=tot===1&amp;&amp;o.hint&amp;&amp;HINT[o.hint];await sendOne(env,x,{t:H?H[0]:(LBT[o.kind]||&#x27;🔔 Du nouveau&#x27;),b:H?(o.by+&#x27; &#x27;+((o.hint===&#x27;co&#x27;&amp;&amp;o.det)?(&#x27;a modifié la liste « &#x27;+o.det+&#x27; »&#x27;):(/^fe[amd]$/.test(o.hint)&amp;&amp;o.det)?evTxt(o.hint,o.det):(/^f[tc][amd]$/.test(o.hint)&amp;&amp;o.det)?itTxt(o.hint,o.det):H[1])):tot&gt;10?(o.by+&#x27; a fait plusieurs modifications&#x27;):tot&gt;1?(o.by+&#x27; : &#x27;+tot+&#x27; modifications&#x27;):(o.by+&#x27; a modifié &#x27;+LBL[o.kind]),g:&#x27;agd-&#x27;+o.kind});
+  }
+  if(jobs.length)await Promise.all(jobs);
+}
+let PEND_OK=0;
+const AMV={co:{a:[&#x27;a ajouté&#x27;,&#x27;aux courses&#x27;],d:[&#x27;a retiré&#x27;,&#x27;des courses&#x27;],x:[&#x27;a coché&#x27;,&#x27;dans les courses&#x27;],u:[&#x27;a décoché&#x27;,&#x27;dans les courses&#x27;],m:[&#x27;a modifié&#x27;,&#x27;dans les courses&#x27;],N:&#x27;article&#x27;},
+ tk:{a:[&#x27;a ajouté&#x27;,&#x27;aux tâches&#x27;],d:[&#x27;a supprimé&#x27;,&#x27;des tâches&#x27;],x:[&#x27;a terminé&#x27;,&#x27;parmi les tâches&#x27;],u:[&#x27;a rouvert&#x27;,&#x27;parmi les tâches&#x27;],m:[&#x27;a modifié&#x27;,&#x27;dans les tâches&#x27;],N:&#x27;tâche&#x27;},
+ ev:{a:[&#x27;a ajouté&#x27;,&#x27;à l’agenda&#x27;],d:[&#x27;a supprimé&#x27;,&#x27;de l’agenda&#x27;],x:[&#x27;a modifié&#x27;,&#x27;dans l’agenda&#x27;],u:[&#x27;a modifié&#x27;,&#x27;dans l’agenda&#x27;],m:[&#x27;a modifié&#x27;,&#x27;dans l’agenda&#x27;],N:&#x27;rendez-vous&#x27;},
+ ee:{a:[&#x27;a ajouté&#x27;,&#x27;aux événements&#x27;],d:[&#x27;a supprimé&#x27;,&#x27;des événements&#x27;],x:[&#x27;a modifié&#x27;,&#x27;dans les événements&#x27;],u:[&#x27;a modifié&#x27;,&#x27;dans les événements&#x27;],m:[&#x27;a modifié&#x27;,&#x27;dans les événements&#x27;],N:&#x27;événement&#x27;},
+ nt:{a:[&#x27;a ajouté&#x27;,&#x27;aux notes&#x27;],d:[&#x27;a supprimé&#x27;,&#x27;des notes&#x27;],x:[&#x27;a modifié&#x27;,&#x27;dans les notes&#x27;],u:[&#x27;a modifié&#x27;,&#x27;dans les notes&#x27;],m:[&#x27;a modifié&#x27;,&#x27;dans les notes&#x27;],N:&#x27;note&#x27;}};
+function amMsg(rows){
+  const by=[...new Set(rows.map(r=&gt;r.by))],hs=[...new Set(rows.map(r=&gt;r.h))];
+  const t=hs.length===1&amp;&amp;HINT[hs[0]]?HINT[hs[0]][0]:LBT.i,who=by.length===1?by[0]:&#x27;Plusieurs membres&#x27;;
+  const G={};rows.forEach(r=&gt;{const p=(r.d||&#x27;&#x27;).split(&#x27;|&#x27;),ac=p[0]&amp;&amp;p[0].length===1?p[0]:&#x27;m&#x27;,tx=p.length&gt;1?p[1]:&#x27;&#x27;,k=r.h+&#x27;|&#x27;+ac;(G[k]=G[k]||{h:r.h,ac,n:[]}).n.push(tx)});
+  const ph=Object.values(G).map(g=&gt;{const V=AMV[g.h];if(!V)return null;const [vb,suf]=V[g.ac]||V.m,nm=g.n.filter(Boolean);
+    const what=(nm.length===g.n.length&amp;&amp;nm.length&lt;=3)?nm.map(x=&gt;&#x27;« &#x27;+x+&#x27; »&#x27;).join(&#x27;, &#x27;):g.n.length+&#x27; &#x27;+V.N+(g.n.length&gt;1?&#x27;s&#x27;:&#x27;&#x27;);
+    return vb+&#x27; &#x27;+what+&#x27; &#x27;+suf});
+  let b=ph.every(Boolean)?(who+&#x27; &#x27;+ph.join(&#x27;, &#x27;)):(who+&#x27; : &#x27;+rows.length+&#x27; modification&#x27;+(rows.length&gt;1?&#x27;s&#x27;:&#x27;&#x27;));
+  if(b.length&gt;150)b=who+&#x27; : &#x27;+rows.length+&#x27; modifications&#x27;;
+  return {t,b};
+}
+const evTxt=(h,d)=&gt;{const p=d.split(&#x27;|&#x27;);return (h===&#x27;fea&#x27;?&#x27;a ajouté&#x27;:h===&#x27;fed&#x27;?&#x27;a supprimé&#x27;:&#x27;a modifié&#x27;)+&#x27; l’événement « &#x27;+p[0]+&#x27; »&#x27;+(p[1]?&#x27; (&#x27;+p[1]+&#x27;)&#x27;:&#x27;&#x27;)};
+const itTxt=(h,d)=&gt;{const co=h[1]===&#x27;c&#x27;,v=h[2]===&#x27;a&#x27;?&#x27;a ajouté&#x27;:h[2]===&#x27;d&#x27;?(co?&#x27;a retiré&#x27;:&#x27;a supprimé&#x27;):&#x27;a modifié&#x27;;if(d[0]===&#x27;#&#x27;)return v+&#x27; &#x27;+d.slice(1)+(co?&#x27; articles aux courses&#x27;:&#x27; tâches&#x27;);return v+(co?&#x27; « &#x27;+d+&#x27; »&#x27;+(h[2]===&#x27;a&#x27;?&#x27; aux courses&#x27;:h[2]===&#x27;d&#x27;?&#x27; des courses&#x27;:&#x27;&#x27;):(h[2]===&#x27;a&#x27;?&#x27; la tâche « &#x27;:h[2]===&#x27;d&#x27;?&#x27; la tâche « &#x27;:&#x27; la tâche « &#x27;)+d+&#x27; »&#x27;)};
+const HINT = { fca:[&#x27;🏠 Famille · Courses&#x27;,&#x27;a ajouté un article aux courses&#x27;], fcm:[&#x27;🏠 Famille · Courses&#x27;,&#x27;a modifié la liste de courses&#x27;], fcd:[&#x27;🏠 Famille · Courses&#x27;,&#x27;a retiré un article des courses&#x27;], fea:[&#x27;Groupe · Agenda&#x27;,&#x27;a ajouté un événement&#x27;], fem:[&#x27;Groupe · Agenda&#x27;,&#x27;a modifié un événement&#x27;], fed:[&#x27;Groupe · Agenda&#x27;,&#x27;a supprimé un événement&#x27;], fta:[&#x27;Groupe · Listes&#x27;,&#x27;a ajouté une tâche ou un article&#x27;], ftm:[&#x27;Groupe · Listes&#x27;,&#x27;a modifié une tâche ou une liste&#x27;], ftd:[&#x27;Groupe · Listes&#x27;,&#x27;a supprimé une tâche ou un article&#x27;], fba:[&#x27;🏠 Famille · Anniversaires&#x27;,&#x27;a ajouté un anniversaire&#x27;], fbm:[&#x27;🏠 Famille · Anniversaires&#x27;,&#x27;a modifié un anniversaire&#x27;], fbd:[&#x27;🏠 Famille · Anniversaires&#x27;,&#x27;a supprimé un anniversaire&#x27;], fva:[&#x27;🏠 Famille · Voyages&#x27;,&#x27;a ajouté un voyage&#x27;], fvm:[&#x27;🏠 Famille · Voyages&#x27;,&#x27;a modifié un voyage&#x27;], fvd:[&#x27;🏠 Famille · Voyages&#x27;,&#x27;a supprimé un voyage&#x27;], fmu:[&#x27;🏠 Famille · Du nouveau&#x27;,&#x27;a fait plusieurs modifications&#x27;], fra:[&#x27;🏠 Famille · Recettes&#x27;,&#x27;a ajouté une recette&#x27;], frm:[&#x27;🏠 Famille · Recettes&#x27;,&#x27;a modifié une recette&#x27;], frd:[&#x27;🏠 Famille · Recettes&#x27;,&#x27;a supprimé une recette&#x27;], tk:[&#x27;☑ Amicale · Tâches&#x27;,&#x27;a modifié une tâche&#x27;], co:[&#x27;🛒 Amicale · Courses&#x27;,&#x27;a modifié la liste de courses&#x27;], ev:[&#x27;📅 Amicale · Agenda&#x27;,&#x27;a modifié l’agenda&#x27;], ee:[&#x27;🎉 Amicale · Événement&#x27;,&#x27;a ajouté ou modifié un événement&#x27;], nt:[&#x27;📝 Amicale · Notes&#x27;,&#x27;a modifié une note&#x27;], am:[&#x27;🎖 Amicale · Membres&#x27;,&#x27;a modifié la liste des amicalistes&#x27;], ad:[&#x27;📁 Amicale · Administratif&#x27;,&#x27;a ajouté ou modifié un document&#x27;], cd:[&#x27;🎁 Amicale · Cadeaux&#x27;,&#x27;a modifié un cadeau&#x27;], ag:[&#x27;📝 Amicale · Compte rendu AG&#x27;,&#x27;a modifié un compte rendu&#x27;], bs:[&#x27;📰 Amicale · Bulletin&#x27;,&#x27;a modifié un bulletin&#x27;], bm:[&#x27;📰 Amicale · Bulletin&#x27;,&#x27;a modifié un modèle de bulletin&#x27;], po:[&#x27;🖼 Amicale · Affiches&#x27;,&#x27;a modifié une affiche&#x27;] };
+const LBT = { a: &#x27;Groupe · Agenda&#x27;, c: &#x27;Groupe · Listes&#x27;, i: &#x27;Groupe · Du nouveau&#x27; };
+const LBL = { a: &#x27;l’agenda partagé&#x27;, c: &#x27;les listes partagées&#x27;, i: &#x27;un élément du groupe&#x27; };
+const OK_ORIGIN = o =&gt; /^https:\/\/[a-z0-9-]+\.github\.io$/.test(o) || o === &#x27;http://localhost:8765&#x27;;
+const MAX = 400 * 1024;
+const DAY = 864e5;
+function cors(req) {
+  const o = req.headers.get(&#x27;Origin&#x27;) || &#x27;&#x27;;
+  return {
+    &#x27;Access-Control-Allow-Origin&#x27;: OK_ORIGIN(o) ? o : &#x27;https://example.invalid&#x27;,
+    &#x27;Access-Control-Allow-Methods&#x27;: &#x27;GET,PUT,POST,OPTIONS&#x27;,
+    &#x27;Access-Control-Allow-Headers&#x27;: &#x27;Content-Type, X-Push-Self, X-Push-Skip, X-Push-Quiet, X-Push-Hint&#x27;,
+    &#x27;Access-Control-Max-Age&#x27;: &#x27;86400&#x27;,
+    &#x27;Vary&#x27;: &#x27;Origin&#x27;
+  };
+}
+const json = (req, obj, status = 200) =&gt; new Response(JSON.stringify(obj), { status, headers: { &#x27;Content-Type&#x27;: &#x27;application/json&#x27;, ...cors(req) } });
+const UA = &#x27;Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1&#x27;;
+let READY = null;
+const MIGD = new Set();
+function ready(env) {
+  if (!READY) READY = env.DB.batch([
+    env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS docs (space TEXT NOT NULL, doc TEXT NOT NULL, at INTEGER NOT NULL, by TEXT, data TEXT NOT NULL, PRIMARY KEY (space, doc))&#x27;),
+    env.DB.prepare(&#x27;CREATE INDEX IF NOT EXISTS docs_at ON docs (space, at)&#x27;),
+    env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS inv (id TEXT PRIMARY KEY, data TEXT NOT NULL, exp INTEGER NOT NULL)&#x27;),
+    env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS mig (space TEXT PRIMARY KEY)&#x27;),
+    env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS push (endpoint TEXT PRIMARY KEY, space TEXT NOT NULL, at INTEGER NOT NULL)&#x27;),
+    env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS push3 (endpoint TEXT NOT NULL, space TEXT NOT NULL, me TEXT NOT NULL DEFAULT \&#x27;\&#x27;, pf TEXT NOT NULL DEFAULT \&#x27;\&#x27;, at INTEGER NOT NULL, p TEXT NOT NULL, a TEXT NOT NULL, last INTEGER NOT NULL DEFAULT 0, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (endpoint, space))&#x27;),
+    env.DB.prepare(&#x27;CREATE INDEX IF NOT EXISTS push3_sp ON push3 (space)&#x27;),
+    env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS remind (endpoint TEXT NOT NULL, id TEXT NOT NULL, at INTEGER NOT NULL, c TEXT NOT NULL, PRIMARY KEY (endpoint, id))&#x27;),
+    env.DB.prepare(&#x27;CREATE INDEX IF NOT EXISTS remind_at ON remind (at)&#x27;)
+  ]).catch(e =&gt; { READY = null; throw e });
+  return READY;
+}
+// recopie unique des anciennes données KV d&#x27;un espace vers D1 (les données plus récentes de D1 sont gardées)
+async function migrate(env, space) {
+  if (!env.FAM || MIGD.has(space)) return;
+  const done = await env.DB.prepare(&#x27;SELECT 1 AS x FROM mig WHERE space = ?&#x27;).bind(space).first();
+  if (done) { MIGD.add(space); return }
+  const st = [];
+  let cursor;
+  do {
+    const l = await env.FAM.list({ prefix: space + &#x27;:&#x27;, cursor });
+    for (const k of l.keys) {
+      const v = await env.FAM.get(k.name);
+      const md = k.metadata || {};
+      if (v) st.push(env.DB.prepare(&#x27;INSERT OR IGNORE INTO docs (space, doc, at, by, data) VALUES (?, ?, ?, ?, ?)&#x27;).bind(space, k.name.slice(33), md.at || 0, md.by || &#x27;&#x27;, v));
+    }
+    cursor = l.list_complete ? null : l.cursor;
+  } while (cursor);
+  st.push(env.DB.prepare(&#x27;INSERT OR IGNORE INTO mig (space) VALUES (?)&#x27;).bind(space));
+  await env.DB.batch(st);
+  MIGD.add(space);
+}
+async function pull(env, space, since) {
+  if (env.DB) {
+    await migrate(env, space);
+    const r = await env.DB.prepare(&#x27;SELECT doc, at, by, data FROM docs WHERE space = ? AND at &gt; ? ORDER BY at&#x27;).bind(space, since).all();
+    return (r.results || []).map(x =&gt; ({ doc: x.doc, at: x.at, by: x.by || &#x27;&#x27;, data: x.data }));
+  }
+  const out = [];
+  let cursor;
+  do {
+    const l = await env.FAM.list({ prefix: space + &#x27;:&#x27;, cursor });
+    for (const k of l.keys) {
+      const md = k.metadata || {};
+      if ((md.at || 0) &gt; since) {
+        const v = await env.FAM.get(k.name);
+        if (v) out.push({ doc: k.name.slice(33), at: md.at || 0, by: md.by || &#x27;&#x27;, data: v });
+      }
+    }
+    cursor = l.list_complete ? null : l.cursor;
+  } while (cursor);
+  return out;
+}
+export default {
+  async fetch(req, env, ctx) {
+    if (req.method === &#x27;OPTIONS&#x27;) return new Response(null, { status: 204, headers: cors(req) });
+    const url = new URL(req.url);
+    if (env.DB) await ready(env);
+    // Code d&#x27;invitation : la clé familiale chiffrée par le code, gardée 7 jours (le serveur ne voit jamais le code)
+    const iv = url.pathname.match(/^\/i\/([0-9a-f]{32})$/);
+    if (iv) {
+      if (req.method === &#x27;GET&#x27;) {
+        let v = null;
+        if (env.DB) { const r = await env.DB.prepare(&#x27;SELECT data FROM inv WHERE id = ? AND exp &gt; ?&#x27;).bind(iv[1], Date.now()).first(); v = r ? r.data : null }
+        if (!v &amp;&amp; env.FAM) v = await env.FAM.get(&#x27;inv:&#x27; + iv[1]);
+        return v ? new Response(v, { headers: { &#x27;Content-Type&#x27;: &#x27;application/json&#x27;, ...cors(req) } }) : json(req, { error: &#x27;inconnu&#x27; }, 404);
+      }
+      if (req.method === &#x27;PUT&#x27;) {
+        const body = await req.text();
+        if (body.length &gt; 4096) return json(req, { error: &#x27;trop gros&#x27; }, 413);
+        let o; try { o = JSON.parse(body) } catch (e) { return json(req, { error: &#x27;illisible&#x27; }, 400) }
+        if (!o || typeof o.c !== &#x27;string&#x27; || typeof o.iv !== &#x27;string&#x27;) return json(req, { error: &#x27;format&#x27; }, 400);
+        const data = JSON.stringify({ c: o.c, iv: o.iv });
+        if (env.DB) await env.DB.prepare(&#x27;INSERT OR REPLACE INTO inv (id, data, exp) VALUES (?, ?, ?)&#x27;).bind(iv[1], data, Date.now() + 7 * DAY).run();
+        else await env.FAM.put(&#x27;inv:&#x27; + iv[1], data, { expirationTtl: 60 * 60 * 24 * 7 });
+        return json(req, { ok: true });
+      }
+      return json(req, { error: &#x27;methode&#x27; }, 405);
+    }
+    // Relais d&#x27;image (photo d&#x27;une recette) : l&#x27;appli ne peut pas la télécharger directement à cause des règles des navigateurs
+    if (url.pathname === &#x27;/img&#x27; &amp;&amp; req.method === &#x27;GET&#x27;) {
+      const u = url.searchParams.get(&#x27;u&#x27;) || &#x27;&#x27;;
+      if (!/^https:\/\/[^\s]{4,2000}$/.test(u)) return json(req, { error: &#x27;lien&#x27; }, 400);
+      let r;
+      try { r = await fetch(u, { headers: { &#x27;User-Agent&#x27;: UA, &#x27;Accept&#x27;: &#x27;image/*&#x27; }, redirect: &#x27;follow&#x27; }) } catch (e) { return json(req, { error: &#x27;injoignable&#x27; }, 502) }
+      const ct = r.headers.get(&#x27;Content-Type&#x27;) || &#x27;&#x27;;
+      if (!r.ok || !/^image\/(jpeg|png|webp|gif|avif)/.test(ct)) return json(req, { error: &#x27;pas une image&#x27; }, 415);
+      const buf = await r.arrayBuffer();
+      if (buf.byteLength &gt; 6 * 1024 * 1024) return json(req, { error: &#x27;trop gros&#x27; }, 413);
+      return new Response(buf, { headers: { &#x27;Content-Type&#x27;: ct, &#x27;Cache-Control&#x27;: &#x27;no-store&#x27;, ...cors(req) } });
+    }
+    // Lire une recette sur un site (Marmiton, 750g…) : on ne renvoie que la recette trouvée (données schema.org), jamais la page
+    if (url.pathname === &#x27;/recette&#x27; &amp;&amp; req.method === &#x27;GET&#x27;) {
+      const u = url.searchParams.get(&#x27;u&#x27;) || &#x27;&#x27;;
+      if (!/^https?:\/\/[^\s]{4,2000}$/.test(u)) return json(req, { error: &#x27;lien&#x27; }, 400);
+      let r;
+      try { r = await fetch(u, { headers: { &#x27;User-Agent&#x27;: UA, &#x27;Accept&#x27;: &#x27;text/html,application/xhtml+xml&#x27;, &#x27;Accept-Language&#x27;: &#x27;fr-FR,fr;q=0.9&#x27; }, redirect: &#x27;follow&#x27; }) } catch (e) { return json(req, { error: &#x27;injoignable&#x27; }, 502) }
+      if (!r.ok) return json(req, { error: &#x27;page &#x27; + r.status }, 502);
+      const html = (await r.text()).slice(0, 3000000);
+      const found = []; const re = /&lt;script[^&gt;]*application\/ld\+json[^&gt;]*&gt;([\s\S]*?)&lt;\/script&gt;/gi; let mm;
+      while ((mm = re.exec(html))) { try { found.push(JSON.parse(mm[1].trim())) } catch (e) { } }
+      let rec = null;
+      const f = x =&gt; { if (!x || rec) return; if (Array.isArray(x)) return x.forEach(f); if (x[&#x27;@graph&#x27;]) f(x[&#x27;@graph&#x27;]); const t = x[&#x27;@type&#x27;]; if (t === &#x27;Recipe&#x27; || (Array.isArray(t) &amp;&amp; t.includes(&#x27;Recipe&#x27;))) rec = x };
+      found.forEach(f);
+      const title = ((html.match(/&lt;title[^&gt;]*&gt;([^&lt;]*)/i) || [])[1] || &#x27;&#x27;).trim().slice(0, 200);
+      if (!rec) return json(req, { error: &#x27;pas de recette&#x27;, title }, 404);
+      const k = [&#x27;name&#x27;, &#x27;recipeYield&#x27;, &#x27;totalTime&#x27;, &#x27;cookTime&#x27;, &#x27;prepTime&#x27;, &#x27;recipeIngredient&#x27;, &#x27;recipeInstructions&#x27;, &#x27;recipeCategory&#x27;, &#x27;image&#x27;];
+      const out = {}; for (const x of k) if (rec[x] != null) out[x] = rec[x];
+      return json(req, { recipe: out, url: r.url });
+    }
+    // Rappels à l&#x27;heure : l&#x27;appli envoie l&#x27;heure et un message CHIFFRÉ (le serveur ne lit que l&#x27;heure)
+    if (url.pathname === &#x27;/remind&#x27; &amp;&amp; req.method === &#x27;PUT&#x27; &amp;&amp; env.DB &amp;&amp; env.VAPID_PRIVATE) {
+      let o; try { o = JSON.parse(await req.text()) } catch (e) { return json(req, { error: &#x27;illisible&#x27; }, 400) }
+      if (!o || !/^https:\/\/[^\s]{10,600}$/.test(o.endpoint || &#x27;&#x27;) || !Array.isArray(o.list)) return json(req, { error: &#x27;format&#x27; }, 400);
+      const known = await env.DB.prepare(&#x27;SELECT 1 AS x FROM push3 WHERE endpoint = ? LIMIT 1&#x27;).bind(o.endpoint).first();
+      if (!known) return json(req, { error: &#x27;inconnu&#x27; }, 404);
+      const st = [env.DB.prepare(&#x27;DELETE FROM remind WHERE endpoint = ?&#x27;).bind(o.endpoint)];
+      for (const r of o.list.slice(0, 150)) {
+        if (!r || typeof r.id !== &#x27;string&#x27; || typeof r.c !== &#x27;string&#x27; || !(r.at &gt; 0) || r.id.length &gt; 120 || r.c.length &gt; 2000) continue;
+        st.push(env.DB.prepare(&#x27;INSERT OR REPLACE INTO remind (endpoint, id, at, c) VALUES (?, ?, ?, ?)&#x27;).bind(o.endpoint, r.id, Math.floor(r.at), r.c));
+      }
+      await env.DB.batch(st);
+      return json(req, { ok: true, n: st.length - 1 });
+    }
+    // Notifications : abonnement d&#x27;un téléphone à un groupe, test, et envoi
+    const pm = url.pathname.match(/^\/push\/([0-9a-f]{32})(\/test)?$/);
+    if (pm &amp;&amp; env.DB &amp;&amp; env.VAPID_PRIVATE) {
+      if (req.method === &#x27;PUT&#x27;) {
+        let o; try { o = JSON.parse(await req.text()) } catch (e) { return json(req, { error: &#x27;illisible&#x27; }, 400) }
+        if (!o || !/^https:\/\/[^\s]{10,600}$/.test(o.endpoint || &#x27;&#x27;)) return json(req, { error: &#x27;format&#x27; }, 400);
+        if (!o.keys || typeof o.keys.p256dh !== &#x27;string&#x27; || typeof o.keys.auth !== &#x27;string&#x27;) return json(req, { error: &#x27;clés&#x27; }, 400);
+        await env.DB.prepare(&#x27;INSERT OR REPLACE INTO push3 (endpoint, space, me, pf, at, p, a) VALUES (?, ?, ?, ?, ?, ?, ?)&#x27;).bind(o.endpoint, pm[1], String(o.me || &#x27;&#x27;).slice(0, 20), String(o.pf || &#x27;&#x27;).slice(0, 60), Date.now(), o.keys.p256dh, o.keys.auth).run();
+        return json(req, { ok: true });
+      }
+      if (req.method === &#x27;POST&#x27; &amp;&amp; pm[2]) return json(req, await pushTest(env, pm[1]));
+      return json(req, { error: &#x27;methode&#x27; }, 405);
+    }
+    if (url.pathname === &#x27;/vapid&#x27; &amp;&amp; req.method === &#x27;GET&#x27;) return json(req, { k: env.VAPID_PUBLIC || &#x27;&#x27; });
+    if (url.pathname === &#x27;/&#x27; || url.pathname === &#x27;/ping&#x27;) return json(req, { ok: true, app: &#x27;asso-malin&#x27;, db: env.DB ? &#x27;d1&#x27; : &#x27;kv&#x27; });
+    // Plusieurs groupes en une seule demande : /m?q=espace1.depuis1,espace2.depuis2
+    if (url.pathname === &#x27;/m&#x27; &amp;&amp; req.method === &#x27;GET&#x27;) {
+      const q = (url.searchParams.get(&#x27;q&#x27;) || &#x27;&#x27;).split(&#x27;,&#x27;).filter(Boolean).slice(0, 12);
+      const r = {};
+      for (const it of q) {
+        const p = it.match(/^([0-9a-f]{32})\.(\d{1,15})$/);
+        if (!p) return json(req, { error: &#x27;format&#x27; }, 400);
+        r[p[1]] = await pull(env, p[1], +p[2]);
+      }
+      return json(req, { now: Date.now(), r });
+    }
+    const m = url.pathname.match(/^\/s\/([0-9a-f]{32})(?:\/([a-z0-9-]{1,40}))?$/);
+    if (!m) return json(req, { error: &#x27;adresse inconnue&#x27; }, 404);
+    const space = m[1], doc = m[2];
+    if (req.method === &#x27;GET&#x27; &amp;&amp; !doc) {
+      // liste des documents modifiés depuis « since » (horodatage en ms)
+      const since = +url.searchParams.get(&#x27;since&#x27;) || 0;
+      return json(req, { now: Date.now(), docs: await pull(env, space, since) });
+    }
+    if (req.method === &#x27;PUT&#x27; &amp;&amp; doc) {
+      const body = await req.text();
+      if (body.length &gt; MAX) return json(req, { error: &#x27;trop gros&#x27; }, 413);
+      let o; try { o = JSON.parse(body) } catch (e) { return json(req, { error: &#x27;illisible&#x27; }, 400) }
+      if (!o || typeof o.c !== &#x27;string&#x27; || typeof o.iv !== &#x27;string&#x27;) return json(req, { error: &#x27;format&#x27; }, 400);
+      const at = Date.now(), by = String(o.by || &#x27;&#x27;).slice(0, 30), data = JSON.stringify({ c: o.c, iv: o.iv });
+      if (env.DB) {
+        await env.DB.prepare(&#x27;INSERT INTO docs (space, doc, at, by, data) VALUES (?, ?, ?, ?, ?) ON CONFLICT (space, doc) DO UPDATE SET at = excluded.at, by = excluded.by, data = excluded.data&#x27;).bind(space, doc, at, by, data).run();
+        // ménage de temps en temps : documents non modifiés depuis 400 jours, invitations expirées
+        if (Math.random() &lt; 0.01) await env.DB.batch([env.DB.prepare(&#x27;DELETE FROM docs WHERE at &lt; ?&#x27;).bind(at - 400 * DAY), env.DB.prepare(&#x27;DELETE FROM inv WHERE exp &lt; ?&#x27;).bind(at)]);
+      } else await env.FAM.put(space + &#x27;:&#x27; + doc, data, { metadata: { at, by }, expirationTtl: 60 * 60 * 24 * 400 });
+      if (env.DB &amp;&amp; env.VAPID_PRIVATE) {
+        const mm = doc.match(/^([ac])-([a-z0-9]+)-([a-z0-9]+)$/), skip = (req.headers.get(&#x27;X-Push-Skip&#x27;) || &#x27;&#x27;).split(&#x27;,&#x27;).filter(Boolean);
+        const kind = mm ? mm[1] : (/^i-/.test(doc) ? &#x27;i&#x27; : null);
+        if (kind &amp;&amp; !req.headers.get(&#x27;X-Push-Quiet&#x27;)) ctx.waitUntil(notify(env, space, { kind, to: mm ? mm[3] : null, by: by || &#x27;Quelqu’un&#x27;, hint: (req.headers.get(&#x27;X-Push-Hint&#x27;) || &#x27;&#x27;).slice(0, 3), det: (() =&gt; { try { return decodeURIComponent(url.searchParams.get(&#x27;d&#x27;) || &#x27;&#x27;).replace(/[\r\n]+/g, &#x27; &#x27;).slice(0, 80) } catch (e) { return &#x27;&#x27; } })(), skip, selfEp: req.headers.get(&#x27;X-Push-Self&#x27;) || null }));
+      }
+      return json(req, { ok: true, at });
+    }
+    return json(req, { error: &#x27;methode&#x27; }, 405);
+  },
+  // Déclencheur « toutes les minutes » : envoie les rappels arrivés à l&#x27;heure
+  async scheduled(ev, env, ctx) {
+    if (!env.DB || !env.VAPID_PRIVATE) { console.log(&#x27;cron: pas de base ou de clé&#x27;); return; }
+    try {
+      await ready(env);
+      const now = Date.now();
+      const r = await env.DB.prepare(&#x27;SELECT endpoint, id, c FROM remind WHERE at &lt;= ? AND at &gt; ? ORDER BY at LIMIT 80&#x27;).bind(now, now - 6 * 3600000).all();
+      const rows = r.results || [];
+      const tot = await env.DB.prepare(&#x27;SELECT COUNT(*) AS n, MIN(at) AS a FROM remind&#x27;).first();
+      console.log(&#x27;cron: &#x27; + rows.length + &#x27; rappel(s) à envoyer ; &#x27; + (tot ? tot.n : &#x27;?&#x27;) + &#x27; en attente ; prochain=&#x27; + (tot &amp;&amp; tot.a ? new Date(tot.a).toISOString() : &#x27;-&#x27;));
+      for (const x of rows) {
+        const s = await env.DB.prepare(&#x27;SELECT endpoint, p, a FROM push3 WHERE endpoint = ? LIMIT 1&#x27;).bind(x.endpoint).first();
+        const res = s ? await sendOne(env, s, { e: x.c }) : &#x27;abonnement introuvable&#x27;;
+        console.log(&#x27;cron: envoi &#x27; + x.id.slice(0, 20) + &#x27; =&gt; &#x27; + res);
+        await env.DB.prepare(&#x27;DELETE FROM remind WHERE endpoint = ? AND id = ?&#x27;).bind(x.endpoint, x.id).run();
+      }
+      await env.DB.prepare(&#x27;DELETE FROM remind WHERE at &lt; ?&#x27;).bind(now - 6 * 3600000).run();
+    } catch (e) { console.log(&#x27;cron: erreur &#x27; + String(e).slice(0, 200)); }
+  }
+};
+</textarea></details></li><li class="step" data-f="ab"><h2>Brancher la base de données au serveur</h2><ul><li>Ouvre ton Worker › <b>Paramètres</b> (Settings) › <b>Liaisons</b> (Bindings) › <b>Ajouter</b> › <b>Base de données D1</b>.</li><li><b>Nom de la variable</b> : écris exactement <code>DB</code> (deux lettres majuscules).</li><li>Choisis la base <code>asso-malin-db</code>, puis <b>Déployer</b>.</li></ul><div class="tip">C’est l’étape où on se trompe le plus : la variable doit s’appeler <b>DB</b>, rien d’autre.</div></li><li class="step" data-f="ab"><h2>Créer les clés des notifications</h2><p>Elles servent aux notifications (rappel de réunion, nouveau message…). Touche le bouton : le navigateur fabrique 2 clés, rien n’est envoyé nulle part.</p><button class="b" id="gk">🔑 Fabriquer mes clés</button><div id="ko" hidden><p><b>1.</b> Dans ton Worker › Paramètres › <b>Variables et secrets</b> › Ajouter :</p><p>Nom <code>VAPID_PUBLIC</code> (type Texte), valeur :</p><div class="cp" id="kp"></div><button class="b alt" data-c="kp">📋 Copier</button><p>Nom <code>VAPID_PRIVATE</code> (type <b>Secret</b>), valeur :</p><div class="cp" id="kv"></div><button class="b alt" data-c="kv">📋 Copier</button><p>Nom <code>VAPID_SUB</code> (type Texte), valeur : <code>mailto:ton-adresse@mail.fr</code> (ton e-mail, pour que les services de notification puissent te contacter en cas de souci).</p><p><b>2.</b> Touche <b>Déployer</b>.</p><div class="tip">Ne montre jamais la clé privée à personne. Les clés ne sont pas conservées sur cette page : si tu la fermes avant d’avoir fini, refais « Fabriquer mes clés » et recopie les deux.</div></div></li><li class="step" data-f="ab"><h2>Relier l’appli à ton serveur</h2><ul><li>Dans ton Worker, copie son adresse : elle ressemble à <code>https://asso-malin.TONCOMPTE.workers.dev</code> (visible en haut de la page du Worker).</li><li>Ouvre <b>ton</b> appli (<code>https://TONNOM.github.io/asso-malin/</code>), touche <b>Créer un groupe</b>, colle l’adresse, <b>Tester et enregistrer</b>. Si « ok » s’affiche, c’est gagné.</li><li>Donne un nom à ton groupe, ton prénom, et tu es l’administrateur.</li></ul></li><li class="step" data-f="ab"><h2>Mettre l’appli sur l’écran d’accueil</h2><ul><li><b>iPhone</b> : ouvre l’adresse dans Safari › bouton Partager › <b>Sur l’écran d’accueil</b>.</li><li><b>Android</b> : dans Chrome › menu ⋮ › <b>Installer l’application</b> (ou Ajouter à l’écran d’accueil).</li></ul><div class="ok">Ensuite, invite les membres depuis l’appli (Groupe › Inviter) : ils reçoivent un message avec un code.</div></li></ol><div class="step" style="counter-increment:none"><h2>🔁 Mettre à jour plus tard</h2><p>Quand une nouvelle version d’Asso malin sort, un clic suffit : <a href="maj.html">page « Mettre à jour mon appli »</a>.</p></div><div class="step" style="counter-increment:none"><h2>🤝 Quand tu passes la main</h2><p><b>Le plus simple</b> : nomme ton successeur <b>administrateur</b> dans l’appli, puis invite-le sur ton Cloudflare (Gérer le compte › Membres › Inviter) et ton GitHub (Settings › Collaborators). Rien ne bouge.</p><p><b>Ou chacun chez soi</b> (tu gardes ton compte, il a le sien) :</p><ol><li>Toi : Réglages › <b>Sauvegarde et code</b> › « Sauvegarder (fichier) », avec un mot de passe. Envoie-lui le fichier et le mot de passe.</li><li>Lui : suit ce guide pour créer <b>son</b> serveur et <b>son</b> appli.</li><li>Lui, sur l’écran d’accueil : <b>« Remettre mon groupe depuis une sauvegarde »</b>, le fichier, le mot de passe.</li><li>Lui : Réglages › Personnalisation › <b>Serveur du groupe</b> : colle l’adresse de son serveur, puis touche <b>« Envoyer tout le groupe »</b>.</li><li>Les membres : Réglages › Personnalisation › <b>Serveur du groupe</b> : ils collent la nouvelle adresse (envoie-la leur par message).</li></ol></div><footer>Asso malin · gratuit, sans publicité, données chiffrées</footer></div><script>
+const A=document.getElementById('ta'),B=document.getElementById('tb');
+function mode(m){A.classList.toggle('on',m==='a');B.classList.toggle('on',m==='b');document.querySelectorAll('#st .step').forEach(x=>x.hidden=(x.dataset.f.indexOf(m)<0));try{sessionStorage.setItem('tm',m)}catch(e){}}
+A.onclick=()=>mode('a');B.onclick=()=>mode('b');mode((function(){try{return sessionStorage.getItem('tm')||'a'}catch(e){return 'a'}})());
+function cp(t,b){navigator.clipboard.writeText(t).then(()=>{const o=b.textContent;b.textContent='✔ Copié';setTimeout(()=>b.textContent=o,1500)}).catch(()=>{})}
+document.getElementById('cpw').onclick=function(){cp(document.getElementById('wk').value,this)};
+document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>cp(document.getElementById(b.dataset.c).textContent,b));
+document.getElementById('gk').onclick=async function(){try{const k=await crypto.subtle.generateKey({name:'ECDSA',namedCurve:'P-256'},true,['sign','verify']);const pub=new Uint8Array(await crypto.subtle.exportKey('raw',k.publicKey)),j=await crypto.subtle.exportKey('jwk',k.privateKey);
+document.getElementById('kp').textContent=btoa(String.fromCharCode.apply(null,pub)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+document.getElementById('kv').textContent=JSON.stringify({kty:j.kty,crv:j.crv,x:j.x,y:j.y,d:j.d});document.getElementById('ko').hidden=false;this.textContent='🔑 Refaire de nouvelles clés'}catch(e){alert('Ton navigateur ne peut pas fabriquer les clés. Essaie avec Chrome ou Safari à jour.')}};
+</script></body></html>

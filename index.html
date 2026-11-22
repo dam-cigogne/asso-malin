@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<script>(function(){try{var P='asm:',S=Storage.prototype,g=S.getItem,st=S.setItem,rm=S.removeItem;S.getItem=function(k){return g.call(this,this===window.localStorage?P+k:k)};S.setItem=function(k,v){return st.call(this,this===window.localStorage?P+k:k,v)};S.removeItem=function(k){return rm.call(this,this===window.localStorage?P+k:k)}}catch(e){}})()</script>
 <script>
 /* Vieux Safari (avant 16.2, ex. Mac ou iPhone anciens) : color-mix() n'existe pas. Une valeur qui contient var() + color-mix() devient alors « transparente » (boutons, icônes, bandeaux sans couleur). On la retire (si une couleur de secours précède) ou on la remplace par la couleur principale / de fond. Sans effet sur les navigateurs récents. */
 (function(){try{if(!/[?&]cmx=1/.test(location.search)&&window.CSS&&CSS.supports&&CSS.supports('color','color-mix(in srgb,red 50%,blue)'))return}catch(e){}
@@ -4575,7 +4576,7 @@ async function updCheck2(quick){
  try{if(swReg){await swReg.update();await new Promise(r=>setTimeout(r,2500));if(swReg.waiting){toast('Version '+live+' prête',15000,{label:'Mettre à jour',fn:()=>swReg.waiting.postMessage('skipWaiting')});if(quick){swReg.waiting.postMessage('skipWaiting');return}return}}}catch(e){}
  const r=quick?'y':await ask({title:'🔄 Version '+live+' disponible',text:'Tu as la version '+APP_VERSION+'. L’appli va se recharger avec la nouvelle version. Tes données ne sont pas touchées.',btns:[{label:'Mettre à jour maintenant',value:'y',cls:'pri'},{label:'Plus tard',value:null}]});
  if(r!=='y')return;
- try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations(),me=new URL('./',location.href).href;for(const x of rs)if(x.scope===me)await x.unregister()}if(window.caches){const ks=await caches.keys();for(const k of ks)if(k.startsWith(AMI?'agd-am-cache':'agd-cache-v'))await caches.delete(k)}}catch(e){}
+ try{if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations(),me=new URL('./',location.href).href;for(const x of rs)if(x.scope===me)await x.unregister()}if(window.caches){const ks=await caches.keys();for(const k of ks)if(k.startsWith('asm-cache-v'))await caches.delete(k)}}catch(e){}
  location.reload();
 }
 async function forceUpdate(){
@@ -4583,7 +4584,7 @@ async function forceUpdate(){
  if(r!=='y')return;
  try{
   if(navigator.serviceWorker){const rs=await navigator.serviceWorker.getRegistrations(),me=new URL('./',location.href).href;for(const x of rs)if(x.scope===me)await x.unregister()}
-  if(window.caches){const ks=await caches.keys();for(const k of ks)if(k.startsWith(AMI?'agd-am-cache':'agd-cache-v'))await caches.delete(k)}
+  if(window.caches){const ks=await caches.keys();for(const k of ks)if(k.startsWith('asm-cache-v'))await caches.delete(k)}
  }catch(e){}
  location.reload();
 }
@@ -10103,7 +10104,7 @@ function coPrint(){
 /* certains iPad (WebKit ancien) ignorent writing-mode sur les <button> : on le détecte et on écrit le texte à la verticale dans un span */
 (function(){try{const b=document.createElement('button');b.style.cssText='writing-mode:vertical-rl;position:absolute;left:-999px;top:0;font-size:16px;padding:0;border:0;white-space:nowrap';b.textContent='Membres';(document.body||document.documentElement).appendChild(b);const ok=b.offsetHeight>b.offsetWidth;b.remove();if(!ok)document.documentElement.classList.add('novwm')}catch(e){}})();
 const PH={db:null,
- open(){if(!this.db)this.db=new Promise((res,rej)=>{try{const r=indexedDB.open(AMI?'agd-am-media':'agd-media',1);r.onupgradeneeded=()=>r.result.createObjectStore('ph');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}});return this.db},
+ open(){if(!this.db)this.db=new Promise((res,rej)=>{try{const r=indexedDB.open('asm-media',1);r.onupgradeneeded=()=>r.result.createObjectStore('ph');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}});return this.db},
  async tx(mode,fn){const db=await this.open();return new Promise((res,rej)=>{const t=db.transaction('ph',mode),st=t.objectStore('ph');const q=fn(st);t.oncomplete=()=>res(q&&q.result);t.onerror=()=>rej(t.error)})},
  get(id){if(ESSAI&&ESS.ph.has(id))return Promise.resolve(ESS.ph.get(id));return this.tx('readonly',st=>st.get(id)).catch(()=>null)},
  put(id,v){if(ESSAI){ESS.ph.set(id,v);return Promise.resolve()}return this.tx('readwrite',st=>st.put(v,id))},
@@ -10962,7 +10963,7 @@ async function pushOff(){
 async function remKey(){
  let k=null;try{k=localStorage.getItem('agd-rk')}catch(e){}
  if(!k){k=btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32))));try{localStorage.setItem('agd-rk',k)}catch(e){}}
- if(!ESSAI)try{const c=await caches.open('agd-rk');await c.put('rk',new Response(k))}catch(e){}
+ if(!ESSAI)try{const c=await caches.open('asm-rk');await c.put('rk',new Response(k))}catch(e){}
  return crypto.subtle.importKey('raw',Uint8Array.from(atob(k),c=>c.charCodeAt(0)),'AES-GCM',false,['encrypt']);
 }
 const remEvTxt=(o,al)=>{const lead=al>=1440&&al%1440===0?(al===1440?'Demain':'Dans '+alarmDays(al))+' · '+fLongY(o.date)+' · ':al>0?'Dans '+(al>=60&&al%60===0?(al/60)+' h':al+' min')+' · ':(o.allDay?'Aujourd’hui · ':'C’est maintenant · ');return{t:(o.ev.icon||'📅')+' '+o.ev.title+(o.allDay?'':' · '+hm(o.s)),b:lead+(o.allDay?'journée entière':hm(o.s)+' – '+hm2(o.e))+(o.ev.place?' · '+o.ev.place+' 📍':'')}};

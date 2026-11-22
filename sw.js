@@ -5,7 +5,7 @@
 const VERSION = '2.82.190';
 /* Version de RÉFÉRENCE : le grand cadre bleu « Nouvelle version » ne s'affiche que sur les appareils plus anciens que celle-ci. La monter seulement pour une nouveauté que tout le monde doit avoir (garder égale à AM_VREF_DEF dans index.html). */
 const VREF = '2.82.158';
-const CACHE = 'agd-cache-v' + VERSION;
+const CACHE = 'asm-cache-v' + VERSION;
 const ASSETS = [
   './',
   'index.html',
@@ -26,7 +26,7 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k.startsWith('agd-cache-v') && k !== CACHE).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('asm-cache-v') && k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
@@ -85,7 +85,7 @@ self.addEventListener('notificationclick', e => {
 });
 
 async function agdDec(b64) {
-  const c = await caches.open('agd-rk'), r = await c.match('rk');
+  const c = await caches.open('asm-rk'), r = await c.match('rk');
   if (!r) return null;
   const kb = Uint8Array.from(atob(await r.text()), x => x.charCodeAt(0));
   const key = await crypto.subtle.importKey('raw', kb, 'AES-GCM', false, ['decrypt']);

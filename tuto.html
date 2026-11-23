@@ -71,7 +71,7 @@ async function notify(env,space,o){
   const r=await env.DB.prepare(&#x27;SELECT endpoint, me, pf, p, a, last, n FROM push3 WHERE space = ?&#x27;).bind(space).all();const now=Date.now();const jobs=[];
   for(const x of (r.results||[])){
     if(x.endpoint===o.selfEp||o.skip.includes(x.me))continue;
-    if(o.to&amp;&amp;x.me!==o.to)continue;
+    if(o.to&amp;&amp;!String(o.to).split(&#x27;,&#x27;).includes(x.me))continue;
     if(x.pf){const pq=x.pf.split(&#x27;!&#x27;);if(!pq[0].includes(o.kind))continue;if(o.kind===&#x27;i&#x27;&amp;&amp;o.hint&amp;&amp;pq[1]&amp;&amp;pq[1].split(&#x27;,&#x27;).includes(o.hint))continue}
     if(o.kind===&#x27;i&#x27;&amp;&amp;!o.hint)continue;
     if(o.kind===&#x27;i&#x27;){jobs.push((async()=&gt;{
@@ -303,7 +303,7 @@ export default {
       if (env.DB &amp;&amp; env.VAPID_PRIVATE) {
         const mm = doc.match(/^([ac])-([a-z0-9]+)-([a-z0-9]+)$/), skip = (req.headers.get(&#x27;X-Push-Skip&#x27;) || &#x27;&#x27;).split(&#x27;,&#x27;).filter(Boolean);
         const kind = mm ? mm[1] : (/^i-/.test(doc) ? &#x27;i&#x27; : null);
-        if (kind &amp;&amp; !req.headers.get(&#x27;X-Push-Quiet&#x27;)) ctx.waitUntil(notify(env, space, { kind, to: mm ? mm[3] : null, by: by || &#x27;Quelqu’un&#x27;, hint: (req.headers.get(&#x27;X-Push-Hint&#x27;) || &#x27;&#x27;).slice(0, 3), det: (() =&gt; { try { return decodeURIComponent(url.searchParams.get(&#x27;d&#x27;) || &#x27;&#x27;).replace(/[\r\n]+/g, &#x27; &#x27;).slice(0, 80) } catch (e) { return &#x27;&#x27; } })(), skip, selfEp: req.headers.get(&#x27;X-Push-Self&#x27;) || null }));
+        if (kind &amp;&amp; !req.headers.get(&#x27;X-Push-Quiet&#x27;)) ctx.waitUntil(notify(env, space, { kind, to: mm ? mm[3] : ((url.searchParams.get(&#x27;to&#x27;) || &#x27;&#x27;).replace(/[^a-z0-9,]/g, &#x27;&#x27;).slice(0, 400) || null), by: by || &#x27;Quelqu’un&#x27;, hint: (req.headers.get(&#x27;X-Push-Hint&#x27;) || &#x27;&#x27;).slice(0, 3), det: (() =&gt; { try { return decodeURIComponent(url.searchParams.get(&#x27;d&#x27;) || &#x27;&#x27;).replace(/[\r\n]+/g, &#x27; &#x27;).slice(0, 80) } catch (e) { return &#x27;&#x27; } })(), skip, selfEp: req.headers.get(&#x27;X-Push-Self&#x27;) || null }));
       }
       return json(req, { ok: true, at });
     }

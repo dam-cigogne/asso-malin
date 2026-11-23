@@ -2995,7 +2995,7 @@ var Q=M["index"];window.QRCodeLib=Q;window.qrMatrix=function(txt,ec){var q=new Q
 (function(){
 'use strict';
 /* ========= Agenda · données, dates, récurrences, .ics, sauvegarde ========= */
-const APP_VERSION='2.82.202';const APP_SHOW='1.0';
+const APP_VERSION='2.82.203';const APP_SHOW='1.0 (mise à jour 203)';
 /* Appli « Asso malin » : même code, publiée aussi sur l’adresse de ton appli/ (seul l'onglet du groupe). Mémoire séparée : préfixe agd-am- */
 const AMI=true;
 const P=AMI?'agd-am-':'agd-';
@@ -3003,7 +3003,7 @@ const K={data:P+'data',set:P+'settings',meta:P+'meta',fired:P+'fired',ms:P+'ms'}
 const BACKUP_FILE=AMI?'amicale-sauvegarde.json':'agenda-sauvegarde.json';
 const ICS_FILE='agenda.ics';
 const CHANGELOG=[
-{v:'2.82.202',d:'22/11/2026',items:['Première version de Asso malin.']}
+{v:'2.82.203',d:'22/11/2026',items:['Première version de Asso malin.']}
 ];
 
 const $=(s,r=document)=>r.querySelector(s);
@@ -11942,7 +11942,7 @@ function appLockCard(){
 }
 async function amPut(zone,doc,P,kraw,hint,det,to){
  const a=amc(),FK=await famKeys({k:kraw||(zone==='b'?a.kB:a.kA)}),b=await famEncK(P,FK.key);b.by=String(a.me.n||'').slice(0,30);
- const r=await fetch(famUrl()+'/s/'+FK.space+'/'+doc+(det?'?d='+encodeURIComponent(String(det).slice(0,80)):'')+(to?(det?'&':'?')+'to='+encodeURIComponent(String(to).slice(0,1400)):''),{method:'PUT',headers:Object.assign({'Content-Type':'application/json','X-Push-Self':pushSelf(),'X-Push-Skip':String(a.me.id||'')},(AM_QUIET||hint==='q'||(hint==='co'&&coQuiet()))?{'X-Push-Quiet':'1'}:{},hint&&hint!=='q'?{'X-Push-Hint':String(hint).slice(0,3)}:{}),body:JSON.stringify(b)});
+ const r=await fetch(famUrl()+'/s/'+FK.space+'/'+doc+(det?'?d='+encodeURIComponent(String(det).slice(0,80)):'')+(to?(det?'&':'?')+'to='+encodeURIComponent(String(to).slice(0,1400)):'')+(typeof APP_SHOW!=='undefined'&&a.nm?((det||to)?'&':'?')+'an='+encodeURIComponent(String(a.nm).replace(/\s+/g,' ').trim().slice(0,24)):''),{method:'PUT',headers:Object.assign({'Content-Type':'application/json','X-Push-Self':pushSelf(),'X-Push-Skip':String(a.me.id||'')},(AM_QUIET||hint==='q'||(hint==='co'&&coQuiet()))?{'X-Push-Quiet':'1'}:{},hint&&hint!=='q'?{'X-Push-Hint':String(hint).slice(0,3)}:{}),body:JSON.stringify(b)});
  if(!r.ok)throw new Error('Serveur : '+r.status);
 }
 const amCardOf=()=>{const m=amc().me;return{app:'agd',k:'amc',v:1,id:m.id,n:m.n,sn:m.sn||'',tel:m.tel||'',mp:m.mp||'',mw:m.mw||'',col:m.col||'',ic:m.ic||'',ph:m.ph||'',pub:m.pub||null,v:APP_VERSION,o:amStandalone()?'app':'site',la:today(),at:Date.now()}};

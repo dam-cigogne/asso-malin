@@ -91,6 +91,7 @@ input,select,textarea{font:inherit;color:inherit}
 @media(min-width:900px){#body.has-side #fab{right:22.2rem}}
 
 /* tabs */
+@media(max-width:999px),(max-height:559px){#tabs{display:none!important}}
 #tabs{display:flex;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
 #tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.5rem 0 .4rem;color:var(--muted);text-align:center}
 #tabs em{font-style:normal;font-size:.72rem;font-weight:700}
@@ -2995,7 +2996,7 @@ var Q=M["index"];window.QRCodeLib=Q;window.qrMatrix=function(txt,ec){var q=new Q
 (function(){
 'use strict';
 /* ========= Agenda · données, dates, récurrences, .ics, sauvegarde ========= */
-const APP_VERSION='2.82.205';const APP_SHOW='1.0 (mise à jour 205)';
+const APP_VERSION='2.82.206';const APP_SHOW='1.0 (mise à jour 206)';
 /* Appli « Asso malin » : même code, publiée aussi sur l’adresse de ton appli/ (seul l'onglet du groupe). Mémoire séparée : préfixe agd-am- */
 const AMI=true;
 const P=AMI?'agd-am-':'agd-';
@@ -3003,7 +3004,7 @@ const K={data:P+'data',set:P+'settings',meta:P+'meta',fired:P+'fired',ms:P+'ms'}
 const BACKUP_FILE=AMI?'amicale-sauvegarde.json':'agenda-sauvegarde.json';
 const ICS_FILE='agenda.ics';
 const CHANGELOG=[
-{v:'2.82.205',d:'22/11/2026',items:['Première version de Asso malin.']}
+{v:'2.82.206',d:'22/11/2026',items:['Première version de Asso malin.']}
 ];
 
 const $=(s,r=document)=>r.querySelector(s);

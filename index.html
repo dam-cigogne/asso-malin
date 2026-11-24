@@ -2996,7 +2996,7 @@ var Q=M["index"];window.QRCodeLib=Q;window.qrMatrix=function(txt,ec){var q=new Q
 (function(){
 'use strict';
 /* ========= Agenda · données, dates, récurrences, .ics, sauvegarde ========= */
-const APP_VERSION='2.82.207';const APP_SHOW='1.0 (mise à jour 207)';
+const APP_VERSION='2.82.208';const APP_SHOW='1.0 (mise à jour 208)';
 /* Appli « Asso malin » : même code, publiée aussi sur l’adresse de ton appli/ (seul l'onglet du groupe). Mémoire séparée : préfixe agd-am- */
 const AMI=true;
 const P=AMI?'agd-am-':'agd-';
@@ -3004,7 +3004,7 @@ const K={data:P+'data',set:P+'settings',meta:P+'meta',fired:P+'fired',ms:P+'ms'}
 const BACKUP_FILE=AMI?'amicale-sauvegarde.json':'agenda-sauvegarde.json';
 const ICS_FILE='agenda.ics';
 const CHANGELOG=[
-{v:'2.82.207',d:'22/11/2026',items:['Première version de Asso malin.']}
+{v:'2.82.208',d:'22/11/2026',items:['Première version de Asso malin.']}
 ];
 
 const $=(s,r=document)=>r.querySelector(s);
@@ -12098,7 +12098,7 @@ async function amRolesPut(){
   if(lost.length){a.rolesDirty=1;a.rolesHeld=lost.length;/* 2.82.154 : la protection reste, mais le message ne revient plus en boucle : jamais sur un appareil secondaire (iPad, Mac), au plus une fois par jour sur le principal ; le détail est dans la carte Synchronisation */if(!amIsSec()&&Date.now()-(+a.rolesHeldT||0)>864e5){a.rolesHeldT=Date.now();try{toast('🛡 Cet appareil n’a pas tous les membres ('+lost.length+' manquant'+(lost.length>1?'s':'')+') : la liste n’est pas envoyée. Fais Réglages › « Tout recharger depuis le serveur ».',7000)}catch(e){}}return}a.rolesHeld=0}
  const at=Date.now(),sig=await amSign(list,at,a.apriv);
  await amPut('a','roles',{app:'agd',k:'amc',v:1,list,at,sig,jz:a.jz||0});
- a.rolesDirty=0;a.roles={list,at};
+ a.rolesDirty=0;a.roles={list,at};Object.values(rl).forEach(r=>{if(r&&r.pend)delete r.pend});
 }
 async function amPush(force){
  if(demo){toast('Non disponible en mode démo',2500);return}
@@ -12140,7 +12140,7 @@ async function amPull(manual){
       if(a.apriv){for(const r of P.list){if(r&&r.id&&r.id!==a.me.id&&(r.on||r.os)&&!(a.rl&&a.rl[r.id]&&(a.rl[r.id].on||a.rl[r.id].os))){a.rl=a.rl||{};a.rl[r.id]=Object.assign(a.rl[r.id]||{},{on:String(r.on||'').slice(0,30),os:String(r.os||'').slice(0,30)});chg=true}if(r&&r.x&&r.id&&r.id!==a.me.id&&!(a.rl&&a.rl[r.id]&&a.rl[r.id].x)){a.rl=a.rl||{};a.rl[r.id]=Object.assign(a.rl[r.id]||{},{x:1});if(a.mem&&a.mem[r.id])delete a.mem[r.id];chg=true}}}
       /* 2.82.145 : deux appareils administrateurs (ex. iPhone + Mac) gardaient chacun leurs propres noms/fonctions. Quand une liste plus récente arrive du serveur, on reprend ses noms, surnoms et fonctions, sauf ce que CET appareil a changé et pas encore envoyé (fusion à 3 voies avec l’ancienne liste) */
       if(a.apriv&&(P.at>(a.roles&&a.roles.at||0)||sNew)){const B={};((a.roles&&a.roles.list)||[]).forEach(r=>{if(r&&r.id)B[r.id]=r});a.rl=a.rl||{};
-       for(const r of P.list){if(!r||!r.id||r.x)continue;const L=a.rl[r.id]||{},bs=B[r.id];for(const f of (r.id===a.me.id?['t']:['t','on','os'])){const sv=String(r[f]||'').slice(0,30),lv=String(L[f]||'');if(sv===lv)continue;const bv=bs?String(bs[f]||''):'';if(!a.rolesDirty||amIsSec()||lv===bv){ /* 2.82.177 : un appareil secondaire (iPad, Mac) prend TOUJOURS les noms et surnoms du serveur (avant : il pouvait garder une ancienne version à vie) */a.rl[r.id]=Object.assign(a.rl[r.id]||{},{[f]:sv});chg=true}}}}
+       for(const r of P.list){if(!r||!r.id||r.x)continue;const L=a.rl[r.id]||{},bs=B[r.id];for(const f of (r.id===a.me.id?['t']:['t','on','os'])){const sv=String(r[f]||'').slice(0,30),lv=String(L[f]||'');if(sv===lv)continue;const bv=bs?String(bs[f]||''):'';if(!(L.pend&&a.rolesDirty)&&(!a.rolesDirty||amIsSec()||lv===bv)){ /* 2.82.177 : un appareil secondaire (iPad, Mac) prend TOUJOURS les noms et surnoms du serveur (avant : il pouvait garder une ancienne version à vie) */a.rl[r.id]=Object.assign(a.rl[r.id]||{},{[f]:sv});chg=true}}}}
       if(!a.apriv||P.at>(a.roles&&a.roles.at||0)||sNew){a.roles={list:P.list.slice(0,200),at:P.at};if(a.apriv)a.admIds=Array.from(new Set(P.list.filter(r=>r.adm).map(r=>r.id).concat([a.me.id])));chg=true}
       if(+P.jz>(a.jz||0)){a.jz=+P.jz;chg=true}}
      continue}
@@ -12493,9 +12493,10 @@ async function amRenameMember(id){
  const a=amc();if(!a||!a.apriv)return;const p=amList().find(x=>x.id===id);if(!p)return;
  const v=await amForm('✏️ Corriger '+p.n,'Visible par tout le groupe à la place de ce que la personne a écrit. Laisse vide pour revenir à son propre nom.',[{k:'n',l:'Nom affiché',v:p.n||''},{k:'s',l:'Surnom (facultatif)',v:p.sn||''}],'Enregistrer');
  if(!v)return;const n=String(v.n||'').trim().slice(0,30),sn=String(v.s||'').trim().slice(0,30);
- a.rl=a.rl||{};a.rl[id]=Object.assign(a.rl[id]||{},{on:n,os:sn});a.rolesDirty=1;amSave();render();
+ a.rl=a.rl||{};a.rl[id]=Object.assign(a.rl[id]||{},{on:n,os:sn,pend:1});a.rolesDirty=1;amSave();render();
+ try{await amPull(true)}catch(e){}
  try{await amPush(true)}catch(e){}
- toast('✅ Nom corrigé pour tout le groupe',3000);
+ toast(a.rolesDirty?'⏳ Correction gardée, envoi au groupe dès que possible':'✅ Nom corrigé pour tout le groupe',4000);
 }
 async function amFiche(id){
  const a=amc();if(!a)return;

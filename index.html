@@ -2996,7 +2996,7 @@ var Q=M["index"];window.QRCodeLib=Q;window.qrMatrix=function(txt,ec){var q=new Q
 (function(){
 'use strict';
 /* ========= Agenda · données, dates, récurrences, .ics, sauvegarde ========= */
-const APP_VERSION='2.82.212';const APP_SHOW='1.0 (mise à jour 212)';
+const APP_VERSION='2.82.213';const APP_SHOW='1.0 (mise à jour 213)';
 /* Appli « Asso malin » : même code, publiée aussi sur l’adresse de ton appli/ (seul l'onglet du groupe). Mémoire séparée : préfixe agd-am- */
 const AMI=true;
 const P=AMI?'agd-am-':'agd-';
@@ -3004,7 +3004,7 @@ const K={data:P+'data',set:P+'settings',meta:P+'meta',fired:P+'fired',ms:P+'ms'}
 const BACKUP_FILE=AMI?'amicale-sauvegarde.json':'agenda-sauvegarde.json';
 const ICS_FILE='agenda.ics';
 const CHANGELOG=[
-{v:'2.82.212',d:'24/11/2026',items:['<b>🏠 Accueil</b> : chaque événement à venir a son affiche animée avec le nombre d’inscrits, les accompagnants et le compte à rebours.','<b>🔗 Liens publics</b> : les liens d’inscription et d’adhésion ouvrent les pages de ton propre groupe, avec tes mots (membre, club…) et sans grades militaires si le groupe est civil.','<b>🧹 Ménage des membres</b> : seuils plus courts (1 et 3 jours), liste de tous les membres avec leur dernière activité, doublons repérés aussi quand un nom commence comme l’autre.','<b>📊 Usage du serveur</b> : messages clairs quand l’usage n’est pas encore branché ou que le serveur n’est pas à jour.','<b>✏️ Correction du nom d’un membre</b> : ta correction (nom et surnom) ne revient plus à l’ancienne valeur.','<b>🧹 Ménage des membres</b> (administrateurs) : un rapport en lecture seule des profils inutilisés et des doublons, dans Réglages.']},
+{v:'2.82.213',d:'24/11/2026',items:['<b>📅 Copies automatiques</b> : « Choisir ce que je remets » fonctionne enfin (il répondait toujours « Rien de coché » même quand on cochait).','<b>🏠 Accueil</b> : chaque événement à venir a son affiche animée avec le nombre d’inscrits, les accompagnants et le compte à rebours.','<b>🔗 Liens publics</b> : les liens d’inscription et d’adhésion ouvrent les pages de ton propre groupe, avec tes mots (membre, club…) et sans grades militaires si le groupe est civil.','<b>🧹 Ménage des membres</b> : seuils plus courts (1 et 3 jours), liste de tous les membres avec leur dernière activité, doublons repérés aussi quand un nom commence comme l’autre.','<b>📊 Usage du serveur</b> : messages clairs quand l’usage n’est pas encore branché ou que le serveur n’est pas à jour.','<b>✏️ Correction du nom d’un membre</b> : ta correction (nom et surnom) ne revient plus à l’ancienne valeur.','<b>🧹 Ménage des membres</b> (administrateurs) : un rapport en lecture seule des profils inutilisés et des doublons, dans Réglages.']},
 {v:'2.82.207',d:'23/11/2026',items:['<b>🔔 Phrases des notifications</b> : tu peux aussi écrire la phrase reçue quand on te confie une tâche.']},
 {v:'2.82.206',d:'23/11/2026',items:['La grosse barre « Groupe » en bas de l’écran est retirée sur téléphone.']},
 {v:'2.82.205',d:'23/11/2026',items:['<b>🔔 Phrases des notifications</b> : l’administrateur peut écrire les phrases des notifications (tâche, événement, commentaire…) dans Personnaliser, pour les adapter au groupe.']},
@@ -7035,7 +7035,7 @@ function ask(o){
   root.onclick=e=>{
    if(e.target.closest('[data-close]')){e.stopPropagation();done(null);return}
    const b=e.target.closest('[data-v]');
-   if(b){e.stopPropagation();done(btns[+b.dataset.v].value)}
+   if(b){e.stopPropagation();const bv=btns[+b.dataset.v].value;done(bv&&typeof bv==='object'&&!Array.isArray(bv)&&Object.getOwnPropertyDescriptor(bv,'value')&&Object.getOwnPropertyDescriptor(bv,'value').get?bv.value:bv)}
    else if(e.target.classList.contains('ov')&&!root.querySelector('.dlgbox input,.dlgbox textarea,.dlgbox select')){e.stopPropagation();done(null)}
   };
   /* 2.82.0 : sur iPad/iPhone, après la fermeture du clavier, les boutons pouvaient ne plus répondre (écran décalé) : on recale la page */
@@ -15204,14 +15204,14 @@ function amDemoRp(it){try{const e=Object.values(it).find(x=>x.kind==='ee'&&x.tx=
 }catch(x){}return it}
 function amDemoAg(){
  try{const y=+amSaOf().slice(0,4),d=y+'-06-25',b=amDemoBm()||{};
-  const g={hd:'Les Tilleuls\nSalle des associations\n1 place de la Mairie\n00000 Les Tilleuls',vi:'Les Tilleuls',fa:y+'-07-02',d,ti:'Procès-verbal de l’Assemblée Générale annuelle de l’Les Tilleuls',ps:'Claire MOREAU',in:AG_IN,
+  const g={hd:'Les Tilleuls\nSalle des associations\n1 place de la Mairie\n00000 Les Tilleuls',vi:'Les Tilleuls',fa:y+'-07-02',d,ti:'Procès-verbal de l’Assemblée Générale annuelle des Tilleuls',ps:'Claire MOREAU',in:AG_IN,
    pr:'- Président : Paul DURAND\n- Vice-présidente : Claire MOREAU\n- Trésorière : Anne BERNARD\n- Secrétaire : Luc MARTIN\nAdhérents du club :\n- Hugo PETIT\n- Marie LEFÈVRE',
    se:[{t:'Bilan financier de septembre '+(y-1)+' à juin '+y,x:'Adhésion '+(y-1)+'-'+y+' : 58 adhérents dont 52 payants soit 1040 Euros\nSolde du compte au 01/09/'+(y-1)+' : 2150 euros\nSolde du compte au 24/06/'+y+' : 1980 euros\n\nVentes de la buvette et du loto : 640 euros.'},
     {t:'Bilan des activités et manifestations proposées entre septembre '+(y-1)+' et juin '+y,x:'10/10/'+String(y-1).slice(2)+' - Repas de rentrée\n05/12/'+String(y-1).slice(2)+' - Loto du club\n19/12/'+String(y-1).slice(2)+' - Soirée de Noël\n17/01/'+String(y).slice(2)+' - Galette des rois\n04/04/'+String(y).slice(2)+' - Vide-grenier de printemps\n*Buvette un vendredi sur deux'},
     {t:'Bureau',x:'Démissionnaires :\nSam ROUSSEAU, trésorier\n\nVote du nouveau bureau\nSont élus à la majorité les personnes suivantes :\nPrésident Paul DURAND\nVice-présidente Claire MOREAU\nTrésorière Anne BERNARD\nSecrétaire Luc MARTIN'},
     {t:'Manifestations à venir',x:'Repas de rentrée en octobre\nLoto en décembre (date à définir)\nSoirée de Noël le 19 décembre\nGalette des rois en janvier\nVide-grenier au printemps'},
     {t:'Règlement '+y+'-'+(y+1)+' validé par l’assemblée',x:String(b.tx||'')}],
-   sg:[{r:'Président de l’Les Tilleuls',n:'Paul DURAND',s:amFakeSig(3)},{r:'Présidente de séance',n:'Claire MOREAU',s:amFakeSig(5)}]};
+   sg:[{r:'Président des Tilleuls',n:'Paul DURAND',s:amFakeSig(3)},{r:'Présidente de séance',n:'Claire MOREAU',s:amFakeSig(5)}]};
   return{dmag1:{id:'dmag1',kind:'ag',tx:'AG du 25/06/'+y,d,x:0,w:'',qt:'',tm:'',pl:'',bd:JSON.stringify(g),by:'Luc Martin',at:Date.now()-86400000*120,del:0,z:'b'}}}catch(e){return {}}
 }
 function amDemoBm(){
@@ -17942,7 +17942,7 @@ async function init(){
  }
 }
 init();
-window.__agd={get EV(){return EV},get S(){return S},get ESSAI(){return ESSAI},set ESSAI(v){ESSAI=v},PH,famUrl,amQrReview,amQrAccept,remList,alarmLabel,amPub,amPren,V,version:APP_VERSION,fn:{amSrvQ,amSrvAsk,amMigrateSrv,amSrvFind,amSrvNorm,amSrvTx,AM_INST_TX,amRotate,amKeyStale,amCxPhClean,amPtMerge,amEeMut,amJjOpen,amSave,amCcAdd,amCcDel,amCcL,amCmCl,amCxNew,amAbOpen,amAbEdit,amAbPlan,amAbs,amItemForm,amLinkIn,amAlertSet,amRotCheck,amRotate,pushSecHTML,amBsHtml,amRegHtml,amBm,amAqDoc,amDevAsk,amItemSave,amWideFix,amAmEdit,amWaPick,amWaK,amAmRowsAdd,amPtEdit,rcPhSet,rcPhGet,jrCheck,jrWrap,saveData,famPull,famPush,enterDemo,exitDemo,go,render,tabsApply,amc,amCreate,amInvite,amJoinCode,amList,amPull,amFlush,amPush,amLinkOut,amRolesPut,amFiche,amVerify,amPoShare,amPoGet,amMenageOpen,amEePoster,amPosterHTML,amMnClean,amQrUrl,amQrImg,amAqFetch,amSendLink,amAmEdit,amAqUrl,amQmImgMake,get PO(){return PO}}};
+window.__agd={get EV(){return EV},get S(){return S},get ESSAI(){return ESSAI},set ESSAI(v){ESSAI=v},PH,famUrl,amQrReview,amQrAccept,remList,alarmLabel,amPub,amPren,V,version:APP_VERSION,fn:{amSrvQ,amSrvAsk,amMigrateSrv,amSrvFind,amSrvNorm,amSrvTx,AM_INST_TX,amRotate,amKeyStale,amCxPhClean,amPtMerge,amEeMut,amJjOpen,amSave,amCcAdd,amCcDel,amCcL,amCmCl,amCxNew,amAbOpen,amAbEdit,amAbPlan,amAbs,amItemForm,amLinkIn,amAlertSet,amRotCheck,amRotate,pushSecHTML,amBsHtml,amRegHtml,amBm,amAqDoc,amDevAsk,amItemSave,amWideFix,amAmEdit,amWaPick,amWaK,amAmRowsAdd,amPtEdit,rcPhSet,rcPhGet,jrCheck,jrWrap,saveData,famPull,famPush,enterDemo,exitDemo,go,render,tabsApply,amc,amCreate,amInvite,amJoinCode,amList,amPull,amFlush,amPush,amLinkOut,amRolesPut,amFiche,amVerify,amPoShare,amPoGet,amMenageOpen,ask,amEePoster,amPosterHTML,amMnClean,amQrUrl,amQrImg,amAqFetch,amSendLink,amAmEdit,amAqUrl,amQmImgMake,get PO(){return PO}}};
 try{if(S&&S.amlPin&&!demo&&!amlScopeAm()){amlCover(1);setTimeout(()=>amlGate().then(ok=>{if(ok)amlCover(0)}),700)}}catch(e){}
 })();
 

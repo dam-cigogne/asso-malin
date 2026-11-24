@@ -2996,7 +2996,7 @@ var Q=M["index"];window.QRCodeLib=Q;window.qrMatrix=function(txt,ec){var q=new Q
 (function(){
 'use strict';
 /* ========= Agenda · données, dates, récurrences, .ics, sauvegarde ========= */
-const APP_VERSION='2.82.210';const APP_SHOW='1.0 (mise à jour 210)';
+const APP_VERSION='2.82.211';const APP_SHOW='1.0 (mise à jour 211)';
 /* Appli « Asso malin » : même code, publiée aussi sur l’adresse de ton appli/ (seul l'onglet du groupe). Mémoire séparée : préfixe agd-am- */
 const AMI=true;
 const P=AMI?'agd-am-':'agd-';
@@ -3004,7 +3004,7 @@ const K={data:P+'data',set:P+'settings',meta:P+'meta',fired:P+'fired',ms:P+'ms'}
 const BACKUP_FILE=AMI?'amicale-sauvegarde.json':'agenda-sauvegarde.json';
 const ICS_FILE='agenda.ics';
 const CHANGELOG=[
-{v:'2.82.210',d:'24/11/2026',items:['<b>🧹 Ménage des membres</b> : seuils plus courts (1 et 3 jours), liste de tous les membres avec leur dernière activité, doublons repérés aussi quand un nom commence comme l’autre.','<b>📊 Usage du serveur</b> : messages clairs quand l’usage n’est pas encore branché ou que le serveur n’est pas à jour.','<b>✏️ Correction du nom d’un membre</b> : ta correction (nom et surnom) ne revient plus à l’ancienne valeur.','<b>🧹 Ménage des membres</b> (administrateurs) : un rapport en lecture seule des profils inutilisés et des doublons, dans Réglages.']},
+{v:'2.82.211',d:'24/11/2026',items:['<b>🔗 Liens publics</b> : les liens d’inscription et d’adhésion ouvrent les pages de ton propre groupe, avec tes mots (membre, club…) et sans grades militaires si le groupe est civil.','<b>🧹 Ménage des membres</b> : seuils plus courts (1 et 3 jours), liste de tous les membres avec leur dernière activité, doublons repérés aussi quand un nom commence comme l’autre.','<b>📊 Usage du serveur</b> : messages clairs quand l’usage n’est pas encore branché ou que le serveur n’est pas à jour.','<b>✏️ Correction du nom d’un membre</b> : ta correction (nom et surnom) ne revient plus à l’ancienne valeur.','<b>🧹 Ménage des membres</b> (administrateurs) : un rapport en lecture seule des profils inutilisés et des doublons, dans Réglages.']},
 {v:'2.82.207',d:'23/11/2026',items:['<b>🔔 Phrases des notifications</b> : tu peux aussi écrire la phrase reçue quand on te confie une tâche.']},
 {v:'2.82.206',d:'23/11/2026',items:['La grosse barre « Groupe » en bas de l’écran est retirée sur téléphone.']},
 {v:'2.82.205',d:'23/11/2026',items:['<b>🔔 Phrases des notifications</b> : l’administrateur peut écrire les phrases des notifications (tâche, événement, commentaire…) dans Personnaliser, pour les adapter au groupe.']},
@@ -13190,9 +13190,9 @@ function amVpInfo(it){const v=it.vp||{};return [v.rm?v.rm.charAt(0).toUpperCase(
 const amPoSecOf=k=>k==='qr'||k==='qm'?'qr':k==='px'?'px':k==='mn'?'mn':'tx';
 const AM_PO_BLK=[['top','Titre'],['acc','Accroche'],['box','Date et lieu'],['pg','Programme'],['info','Infos'],['qr','QR inscription'],['qm','QR menu'],['px','Tarifs'],['ft','Bas de page'],['ct','Contact']];
 /* 2.82.163 : adresse des pages publiques (inscription, adhésion, contact, menus) trouvée toute seule d'après l'adresse de l'appli : copiée ailleurs, l'appli fabrique ses liens chez elle. Asso malin → son dossier ; Asso malin → le dossier « amicale » voisin. */
-function amPub(h){try{const b=h||location.href,u=new URL(/\/amicale(\/|$)/.test(new URL(b).pathname)?'./':'../amicale/',b);if(/^https?:$/.test(u.protocol))return u.href}catch(e){}return location.href.replace(/[?#].*$/,'').replace(/[^\/]*$/,'')}
+function amPub(h){try{const b=h||location.href,u=new URL('./',b);if(/^https?:$/.test(u.protocol))return u.href}catch(e){}return location.href.replace(/[?#].*$/,'').replace(/[^\/]*$/,'')}
 /* 2.82.164 : si le groupe a son propre serveur, son adresse part dans les liens publics (?s=) ; serveur habituel : liens inchangés */
-const amSrvQ=()=>{const u=famUrl(),q=[];if(u&&u!==FAM_URL_DEF)q.push('s='+encodeURIComponent(u));const v={};['s','ns'].forEach(k=>{if(amW(k)!==AMW_DEF[k])v[k]=amW(k)});if(Object.keys(v).length)q.push('w='+encodeURIComponent(JSON.stringify(v)));return q.length?'?'+q.join('&'):''};
+const amSrvQ=()=>{const u=famUrl(),q=[];if(u&&u!==FAM_URL_DEF)q.push('s='+encodeURIComponent(u));const v={};['s','ns'].forEach(k=>{if(amW(k)!==AMW_DEF[k])v[k]=amW(k)});if(!amGrMil())v.c=1;if(Object.keys(v).length)q.push('w='+encodeURIComponent(JSON.stringify(v)));return q.length?'?'+q.join('&'):''};
 const amPubTxt=()=>amPub().replace(/^https?:\/\//,'').replace(/\/$/,'');
 const amQmUrl=it=>amPub()+'menu.html'+amSrvQ()+'#'+(it.qm&&it.qm.id||'');
 const amPoQm=(it,P,bp,cl)=>(it&&it.qm&&P.qms==='1'&&P.md!=='menu')?amPoQrBox(bp,'qm',cl,amQmUrl(it),P.qmz,P.qmt||'bd',(P.qmx!=null&&P.qmx!==''?P.qmx:'🍽 Le menu'),P.qmts):'';

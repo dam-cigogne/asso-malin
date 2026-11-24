@@ -61,9 +61,10 @@ async function sendOne(env,x,msg){
   }catch(e){return String(e).slice(0,80)}
 }
 // Test : envoyé à tous les téléphones du groupe, sans règle
-async function pushTest(env,space){
-  const r=await env.DB.prepare(&#x27;SELECT endpoint, p, a FROM push3 WHERE space = ?&#x27;).bind(space).all();let ok=0;const err=[];
-  for(const x of (r.results||[])){const s=await sendOne(env,x,{t:&#x27;✅ Test réussi&#x27;,b:&#x27;Les notifications fonctionnent sur ce téléphone 🎉&#x27;,g:&#x27;agd-test&#x27;});if(s===&#x27;ok&#x27;)ok++;else err.push(s)}
+// Avec « ep » : seulement ce téléphone (2.78.2)
+async function pushTest(env,space,ep,lb){
+  const r=ep?await env.DB.prepare(&#x27;SELECT endpoint, p, a FROM push3 WHERE space = ? AND endpoint = ?&#x27;).bind(space,ep).all():await env.DB.prepare(&#x27;SELECT endpoint, p, a FROM push3 WHERE space = ?&#x27;).bind(space).all();let ok=0;const err=[];
+  for(const x of (r.results||[])){const s=await sendOne(env,x,{t:&#x27;✅ Test réussi&#x27;+(lb?&#x27; · &#x27;+lb:&#x27;&#x27;),b:&#x27;Les notifications fonctionnent sur ce téléphone 🎉&#x27;,g:&#x27;agd-test-&#x27;+space.slice(0,6)});if(s===&#x27;ok&#x27;)ok++;else err.push(s)}
   return {ok,err};
 }
 // Vraie notification : jamais pour ses propres appareils, seulement pour le destinataire, une pour chaque modification
@@ -95,6 +96,10 @@ const AMV={co:{a:[&#x27;a ajouté&#x27;,&#x27;aux courses&#x27;],d:[&#x27;a reti
  tk:{a:[&#x27;a ajouté&#x27;,&#x27;aux tâches&#x27;],d:[&#x27;a supprimé&#x27;,&#x27;des tâches&#x27;],x:[&#x27;a terminé&#x27;,&#x27;parmi les tâches&#x27;],u:[&#x27;a rouvert&#x27;,&#x27;parmi les tâches&#x27;],m:[&#x27;a modifié&#x27;,&#x27;dans les tâches&#x27;],N:&#x27;tâche&#x27;},
  ev:{a:[&#x27;a ajouté&#x27;,&#x27;à l’agenda&#x27;],d:[&#x27;a supprimé&#x27;,&#x27;de l’agenda&#x27;],x:[&#x27;a modifié&#x27;,&#x27;dans l’agenda&#x27;],u:[&#x27;a modifié&#x27;,&#x27;dans l’agenda&#x27;],m:[&#x27;a modifié&#x27;,&#x27;dans l’agenda&#x27;],N:&#x27;rendez-vous&#x27;},
  ee:{a:[&#x27;a ajouté&#x27;,&#x27;aux événements&#x27;],d:[&#x27;a supprimé&#x27;,&#x27;des événements&#x27;],x:[&#x27;a modifié&#x27;,&#x27;dans les événements&#x27;],u:[&#x27;a modifié&#x27;,&#x27;dans les événements&#x27;],m:[&#x27;a modifié&#x27;,&#x27;dans les événements&#x27;],N:&#x27;événement&#x27;},
+ qr:{a:[&#x27;a envoyé&#x27;,&#x27;par QR code&#x27;],m:[&#x27;a envoyé&#x27;,&#x27;par QR code&#x27;],N:&#x27;inscription&#x27;},
+ cx:{a:[&#x27;a écrit&#x27;,&#x27;dans la boîte à idées&#x27;],m:[&#x27;a écrit&#x27;,&#x27;dans la boîte à idées&#x27;],N:&#x27;message&#x27;},
+ aq:{a:[&#x27;a envoyé&#x27;,&#x27;pour adhérer&#x27;],m:[&#x27;a envoyé&#x27;,&#x27;pour adhérer&#x27;],N:&#x27;demande&#x27;},
+ id:{a:[&#x27;a proposé&#x27;,&#x27;dans la boîte à idées&#x27;],d:[&#x27;a supprimé&#x27;,&#x27;de la boîte à idées&#x27;],v:[&#x27;a validé ou mis à jour&#x27;,&#x27;dans la boîte à idées&#x27;],r:[&#x27;a répondu à&#x27;,&#x27;dans la boîte à idées&#x27;],x:[&#x27;a modifié&#x27;,&#x27;dans la boîte à idées&#x27;],u:[&#x27;a modifié&#x27;,&#x27;dans la boîte à idées&#x27;],m:[&#x27;a modifié&#x27;,&#x27;dans la boîte à idées&#x27;],N:&#x27;idée&#x27;},
  nt:{a:[&#x27;a ajouté&#x27;,&#x27;aux notes&#x27;],d:[&#x27;a supprimé&#x27;,&#x27;des notes&#x27;],x:[&#x27;a modifié&#x27;,&#x27;dans les notes&#x27;],u:[&#x27;a modifié&#x27;,&#x27;dans les notes&#x27;],m:[&#x27;a modifié&#x27;,&#x27;dans les notes&#x27;],N:&#x27;note&#x27;}};
 function amMsg(rows){
   const by=[...new Set(rows.map(r=&gt;r.by))],hs=[...new Set(rows.map(r=&gt;r.h))];
@@ -110,8 +115,8 @@ function amMsg(rows){
   return {t,b};
 }
 const evTxt=(h,d)=&gt;{const p=d.split(&#x27;|&#x27;);return (h===&#x27;fea&#x27;?&#x27;a ajouté&#x27;:h===&#x27;fed&#x27;?&#x27;a supprimé&#x27;:&#x27;a modifié&#x27;)+&#x27; l’événement « &#x27;+p[0]+&#x27; »&#x27;+(p[1]?&#x27; (&#x27;+p[1]+&#x27;)&#x27;:&#x27;&#x27;)};
-const itTxt=(h,d)=&gt;{const co=h[1]===&#x27;c&#x27;,v=h[2]===&#x27;a&#x27;?&#x27;a ajouté&#x27;:h[2]===&#x27;d&#x27;?(co?&#x27;a retiré&#x27;:&#x27;a supprimé&#x27;):&#x27;a modifié&#x27;;if(d[0]===&#x27;#&#x27;)return v+&#x27; &#x27;+d.slice(1)+(co?&#x27; articles aux courses&#x27;:&#x27; tâches&#x27;);return v+(co?&#x27; « &#x27;+d+&#x27; »&#x27;+(h[2]===&#x27;a&#x27;?&#x27; aux courses&#x27;:h[2]===&#x27;d&#x27;?&#x27; des courses&#x27;:&#x27;&#x27;):(h[2]===&#x27;a&#x27;?&#x27; la tâche « &#x27;:h[2]===&#x27;d&#x27;?&#x27; la tâche « &#x27;:&#x27; la tâche « &#x27;)+d+&#x27; »&#x27;)};
-const HINT = { fca:[&#x27;🏠 Famille · Courses&#x27;,&#x27;a ajouté un article aux courses&#x27;], fcm:[&#x27;🏠 Famille · Courses&#x27;,&#x27;a modifié la liste de courses&#x27;], fcd:[&#x27;🏠 Famille · Courses&#x27;,&#x27;a retiré un article des courses&#x27;], fea:[&#x27;Groupe · Agenda&#x27;,&#x27;a ajouté un événement&#x27;], fem:[&#x27;Groupe · Agenda&#x27;,&#x27;a modifié un événement&#x27;], fed:[&#x27;Groupe · Agenda&#x27;,&#x27;a supprimé un événement&#x27;], fta:[&#x27;Groupe · Listes&#x27;,&#x27;a ajouté une tâche ou un article&#x27;], ftm:[&#x27;Groupe · Listes&#x27;,&#x27;a modifié une tâche ou une liste&#x27;], ftd:[&#x27;Groupe · Listes&#x27;,&#x27;a supprimé une tâche ou un article&#x27;], fba:[&#x27;🏠 Famille · Anniversaires&#x27;,&#x27;a ajouté un anniversaire&#x27;], fbm:[&#x27;🏠 Famille · Anniversaires&#x27;,&#x27;a modifié un anniversaire&#x27;], fbd:[&#x27;🏠 Famille · Anniversaires&#x27;,&#x27;a supprimé un anniversaire&#x27;], fva:[&#x27;🏠 Famille · Voyages&#x27;,&#x27;a ajouté un voyage&#x27;], fvm:[&#x27;🏠 Famille · Voyages&#x27;,&#x27;a modifié un voyage&#x27;], fvd:[&#x27;🏠 Famille · Voyages&#x27;,&#x27;a supprimé un voyage&#x27;], fmu:[&#x27;🏠 Famille · Du nouveau&#x27;,&#x27;a fait plusieurs modifications&#x27;], fra:[&#x27;🏠 Famille · Recettes&#x27;,&#x27;a ajouté une recette&#x27;], frm:[&#x27;🏠 Famille · Recettes&#x27;,&#x27;a modifié une recette&#x27;], frd:[&#x27;🏠 Famille · Recettes&#x27;,&#x27;a supprimé une recette&#x27;], tk:[&#x27;☑ Groupe · Tâches&#x27;,&#x27;a modifié une tâche&#x27;], co:[&#x27;🛒 Groupe · Courses&#x27;,&#x27;a modifié la liste de courses&#x27;], ev:[&#x27;📅 Groupe · Agenda&#x27;,&#x27;a modifié l’agenda&#x27;], ee:[&#x27;🎉 Groupe · Événement&#x27;,&#x27;a ajouté ou modifié un événement&#x27;], nt:[&#x27;📝 Groupe · Notes&#x27;,&#x27;a modifié une note&#x27;], am:[&#x27;🎖 Groupe · Membres&#x27;,&#x27;a modifié la liste des membres&#x27;], ad:[&#x27;📁 Groupe · Administratif&#x27;,&#x27;a ajouté ou modifié un document&#x27;], cd:[&#x27;🎁 Groupe · Cadeaux&#x27;,&#x27;a modifié un cadeau&#x27;], ag:[&#x27;📝 Groupe · Compte rendu AG&#x27;,&#x27;a modifié un compte rendu&#x27;], bs:[&#x27;📰 Groupe · Bulletin&#x27;,&#x27;a modifié un bulletin&#x27;], bm:[&#x27;📰 Groupe · Bulletin&#x27;,&#x27;a modifié un modèle de bulletin&#x27;], po:[&#x27;🖼 Groupe · Affiches&#x27;,&#x27;a modifié une affiche&#x27;] };
+const itTxt=(h,d)=&gt;{const co=h[1]===&#x27;c&#x27;,v=h[2]===&#x27;a&#x27;?&#x27;a ajouté&#x27;:h[2]===&#x27;d&#x27;?(co?&#x27;a retiré&#x27;:&#x27;a supprimé&#x27;):&#x27;a modifié&#x27;;if(d[0]===&#x27;#&#x27;){const p=d.slice(1).split(&#x27;|&#x27;),c=+p[0]||0,nm=p.slice(1).filter(Boolean),suf=co?(h[2]===&#x27;a&#x27;?&#x27; aux courses&#x27;:h[2]===&#x27;d&#x27;?&#x27; des courses&#x27;:&#x27; dans les courses&#x27;):&#x27;&#x27;;if(nm.length)return v+&#x27; &#x27;+nm.map(x=&gt;&#x27;« &#x27;+x+&#x27; »&#x27;).join(&#x27;, &#x27;)+(c&gt;nm.length?&#x27; et &#x27;+(c-nm.length)+&#x27; autre&#x27;+(c-nm.length&gt;1?&#x27;s&#x27;:&#x27;&#x27;):&#x27;&#x27;)+(co?suf:&#x27; (tâches)&#x27;);return v+&#x27; &#x27;+c+(co?&#x27; articles&#x27;:&#x27; tâches&#x27;)+suf}return v+(co?&#x27; « &#x27;+d+&#x27; »&#x27;+(h[2]===&#x27;a&#x27;?&#x27; aux courses&#x27;:h[2]===&#x27;d&#x27;?&#x27; des courses&#x27;:&#x27;&#x27;):(h[2]===&#x27;a&#x27;?&#x27; la tâche « &#x27;:h[2]===&#x27;d&#x27;?&#x27; la tâche « &#x27;:&#x27; la tâche « &#x27;)+d+&#x27; »&#x27;)};
+const HINT = { qr:[&#x27;📲 Groupe · Inscription&#x27;,&#x27;Nouvelle inscription reçue par QR code&#x27;], cx:[&#x27;📬 Groupe · Boîte à idées&#x27;,&#x27;Nouveau message dans la boîte à idées&#x27;], aq:[&#x27;🎖 Groupe · Adhésion&#x27;,&#x27;Nouvelle demande d’adhésion&#x27;], id:[&#x27;💡 Groupe · Boîte à idées&#x27;,&#x27;a écrit dans la boîte à idées&#x27;], fca:[&#x27;🏠 Famille · Courses&#x27;,&#x27;a ajouté un article aux courses&#x27;], fcm:[&#x27;🏠 Famille · Courses&#x27;,&#x27;a modifié la liste de courses&#x27;], fcd:[&#x27;🏠 Famille · Courses&#x27;,&#x27;a retiré un article des courses&#x27;], fea:[&#x27;Groupe · Agenda&#x27;,&#x27;a ajouté un événement&#x27;], fem:[&#x27;Groupe · Agenda&#x27;,&#x27;a modifié un événement&#x27;], fed:[&#x27;Groupe · Agenda&#x27;,&#x27;a supprimé un événement&#x27;], fta:[&#x27;Groupe · Listes&#x27;,&#x27;a ajouté une tâche ou un article&#x27;], ftm:[&#x27;Groupe · Listes&#x27;,&#x27;a modifié une tâche ou une liste&#x27;], ftd:[&#x27;Groupe · Listes&#x27;,&#x27;a supprimé une tâche ou un article&#x27;], fba:[&#x27;🏠 Famille · Anniversaires&#x27;,&#x27;a ajouté un anniversaire&#x27;], fbm:[&#x27;🏠 Famille · Anniversaires&#x27;,&#x27;a modifié un anniversaire&#x27;], fbd:[&#x27;🏠 Famille · Anniversaires&#x27;,&#x27;a supprimé un anniversaire&#x27;], fva:[&#x27;🏠 Famille · Voyages&#x27;,&#x27;a ajouté un voyage&#x27;], fvm:[&#x27;🏠 Famille · Voyages&#x27;,&#x27;a modifié un voyage&#x27;], fvd:[&#x27;🏠 Famille · Voyages&#x27;,&#x27;a supprimé un voyage&#x27;], fmu:[&#x27;🏠 Famille · Du nouveau&#x27;,&#x27;a fait plusieurs modifications&#x27;], fra:[&#x27;🏠 Famille · Recettes&#x27;,&#x27;a ajouté une recette&#x27;], frm:[&#x27;🏠 Famille · Recettes&#x27;,&#x27;a modifié une recette&#x27;], frd:[&#x27;🏠 Famille · Recettes&#x27;,&#x27;a supprimé une recette&#x27;], tk:[&#x27;☑ Groupe · Tâches&#x27;,&#x27;a modifié une tâche&#x27;], co:[&#x27;🛒 Groupe · Courses&#x27;,&#x27;a modifié la liste de courses&#x27;], ev:[&#x27;📅 Groupe · Agenda&#x27;,&#x27;a modifié l’agenda&#x27;], ee:[&#x27;🎉 Groupe · Événement&#x27;,&#x27;a ajouté ou modifié un événement&#x27;], nt:[&#x27;📝 Groupe · Notes&#x27;,&#x27;a modifié une note&#x27;], am:[&#x27;🎖 Groupe · Membres&#x27;,&#x27;a modifié la liste des membres&#x27;], ad:[&#x27;📁 Groupe · Administratif&#x27;,&#x27;a ajouté ou modifié un document&#x27;], cd:[&#x27;🎁 Groupe · Cadeaux&#x27;,&#x27;a modifié un cadeau&#x27;], ag:[&#x27;📝 Groupe · Compte rendu AG&#x27;,&#x27;a modifié un compte rendu&#x27;], bs:[&#x27;📰 Groupe · Bulletin&#x27;,&#x27;a modifié un bulletin&#x27;], bm:[&#x27;📰 Groupe · Bulletin&#x27;,&#x27;a modifié un modèle de bulletin&#x27;], po:[&#x27;🖼 Groupe · Affiches&#x27;,&#x27;a modifié une affiche&#x27;] };
 HINT.xt = [&#x27;🔔 Groupe · Du nouveau&#x27;, &#x27;a fait une modification&#x27;];
 const LBT = { a: &#x27;Groupe · Agenda&#x27;, c: &#x27;Groupe · Listes&#x27;, i: &#x27;Groupe · Du nouveau&#x27; };
 const LBL = { a: &#x27;l’agenda partagé&#x27;, c: &#x27;les listes partagées&#x27;, i: &#x27;un élément du groupe&#x27; };
@@ -131,6 +136,7 @@ function cors(req) {
 const json = (req, obj, status = 200) =&gt; new Response(JSON.stringify(obj), { status, headers: { &#x27;Content-Type&#x27;: &#x27;application/json&#x27;, ...cors(req) } });
 const UA = &#x27;Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1&#x27;;
 let READY = null;
+let USAGE = null;
 const MIGD = new Set();
 function ready(env) {
   if (!READY) READY = env.DB.batch([
@@ -142,7 +148,14 @@ function ready(env) {
     env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS push3 (endpoint TEXT NOT NULL, space TEXT NOT NULL, me TEXT NOT NULL DEFAULT \&#x27;\&#x27;, pf TEXT NOT NULL DEFAULT \&#x27;\&#x27;, at INTEGER NOT NULL, p TEXT NOT NULL, a TEXT NOT NULL, last INTEGER NOT NULL DEFAULT 0, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (endpoint, space))&#x27;),
     env.DB.prepare(&#x27;CREATE INDEX IF NOT EXISTS push3_sp ON push3 (space)&#x27;),
     env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS remind (endpoint TEXT NOT NULL, id TEXT NOT NULL, at INTEGER NOT NULL, c TEXT NOT NULL, PRIMARY KEY (endpoint, id))&#x27;),
-    env.DB.prepare(&#x27;CREATE INDEX IF NOT EXISTS remind_at ON remind (at)&#x27;)
+    env.DB.prepare(&#x27;CREATE INDEX IF NOT EXISTS remind_at ON remind (at)&#x27;),
+    env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS inbox (n INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT NOT NULL, at INTEGER NOT NULL, ip TEXT NOT NULL DEFAULT \&#x27;\&#x27;, data TEXT NOT NULL)&#x27;),
+    env.DB.prepare(&#x27;CREATE INDEX IF NOT EXISTS inbox_id ON inbox (id, n)&#x27;),
+    env.DB.prepare(&#x27;CREATE INDEX IF NOT EXISTS inbox_ip ON inbox (ip, at)&#x27;),
+    env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS inboxsp (id TEXT PRIMARY KEY, space TEXT NOT NULL, at INTEGER NOT NULL)&#x27;),
+    env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS inboxk (id TEXT PRIMARY KEY, k TEXT NOT NULL)&#x27;),
+    env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS inboxcl (id TEXT PRIMARY KEY, cl INTEGER NOT NULL)&#x27;),
+    env.DB.prepare(&#x27;CREATE TABLE IF NOT EXISTS pubm (id TEXT PRIMARY KEY, k TEXT NOT NULL, data TEXT NOT NULL, at INTEGER NOT NULL)&#x27;)
   ]).catch(e =&gt; { READY = null; throw e });
   return READY;
 }
@@ -258,8 +271,85 @@ export default {
       await env.DB.batch(st);
       return json(req, { ok: true, n: st.length - 1 });
     }
+    // 2.80.0 : inscriptions par QR code. Le formulaire public dépose une inscription CHIFFRÉE (clé publique de l&#x27;événement) ;
+    // seuls les organisateurs, qui ont la clé privée, peuvent la lire. Le serveur ne voit que des données illisibles.
+    const im = url.pathname.match(/^\/in\/([0-9a-f]{32})$/);
+    if (im &amp;&amp; env.DB) {
+      await ready(env);
+      const id = im[1], now = Date.now();
+      if (req.method === &#x27;POST&#x27;) {
+        const body = await req.text();
+        if (body.length &gt; 4000) return json(req, { error: &#x27;trop gros&#x27; }, 413);
+        let o; try { o = JSON.parse(body) } catch (e) { return json(req, { error: &#x27;illisible&#x27; }, 400) }
+        if (!o || !o.e || typeof o.e.x !== &#x27;string&#x27; || typeof o.e.y !== &#x27;string&#x27; || typeof o.iv !== &#x27;string&#x27; || typeof o.c !== &#x27;string&#x27;) return json(req, { error: &#x27;format&#x27; }, 400);
+        /* 2.82.115 : inscriptions closes (date + heure fixées par les organisateurs, ou clôture manuelle) */
+        const cz = await env.DB.prepare(&#x27;SELECT cl FROM inboxcl WHERE id = ?&#x27;).bind(id).first();
+        if (cz &amp;&amp; cz.cl &gt; 0 &amp;&amp; now &gt;= cz.cl) return json(req, { error: &#x27;closed&#x27;, cl: cz.cl }, 403);
+        const ipr = req.headers.get(&#x27;CF-Connecting-IP&#x27;) || &#x27;&#x27;;
+        const ip = Array.from(new Uint8Array(await crypto.subtle.digest(&#x27;SHA-256&#x27;, new TextEncoder().encode(&#x27;agd-in:&#x27; + ipr)))).slice(0, 8).map(b =&gt; b.toString(16).padStart(2, &#x27;0&#x27;)).join(&#x27;&#x27;);
+        const rl = await env.DB.prepare(&#x27;SELECT COUNT(*) AS n FROM inbox WHERE ip = ? AND at &gt; ?&#x27;).bind(ip, now - 3600e3).first();
+        if (rl &amp;&amp; rl.n &gt;= 20) return json(req, { error: &#x27;trop de demandes, réessaie plus tard&#x27; }, 429);
+        const tot = await env.DB.prepare(&#x27;SELECT COUNT(*) AS n FROM inbox WHERE id = ?&#x27;).bind(id).first();
+        if (tot &amp;&amp; tot.n &gt;= 600) return json(req, { error: &#x27;complet&#x27; }, 409);
+        await env.DB.prepare(&#x27;INSERT INTO inbox (id, at, ip, data) VALUES (?, ?, ?, ?)&#x27;).bind(id, now, ip, JSON.stringify({ e: { x: o.e.x.slice(0, 60), y: o.e.y.slice(0, 60) }, iv: o.iv.slice(0, 40), c: o.c.slice(0, 3800) })).run();
+        if (Math.random() &lt; 0.02) await env.DB.prepare(&#x27;DELETE FROM inbox WHERE at &lt; ?&#x27;).bind(now - 200 * DAY).run();
+        const sp = await env.DB.prepare(&#x27;SELECT space FROM inboxsp WHERE id = ?&#x27;).bind(id).first();
+        const ik = sp ? await env.DB.prepare(&#x27;SELECT k FROM inboxk WHERE id = ?&#x27;).bind(id).first() : null, hk = ik &amp;&amp; (ik.k === &#x27;cx&#x27; || ik.k === &#x27;aq&#x27;) ? ik.k : &#x27;qr&#x27;;
+        if (sp &amp;&amp; env.VAPID_PRIVATE) ctx.waitUntil(notify(env, sp.space, { kind: &#x27;i&#x27;, to: null, by: &#x27;Quelqu’un&#x27;, hint: hk, det: &#x27;a|&#x27;, skip: [], selfEp: null }));
+        return json(req, { ok: true });
+      }
+      if (req.method === &#x27;PUT&#x27;) {
+        let o; try { o = JSON.parse(await req.text()) } catch (e) { return json(req, { error: &#x27;illisible&#x27; }, 400) }
+        if (!o || !/^[0-9a-f]{32}$/.test(o.space || &#x27;&#x27;)) return json(req, { error: &#x27;format&#x27; }, 400);
+        await env.DB.prepare(&#x27;INSERT OR IGNORE INTO inboxsp (id, space, at) VALUES (?, ?, ?)&#x27;).bind(id, o.space, now).run();
+        if ([&#x27;cx&#x27;, &#x27;aq&#x27;, &#x27;qr&#x27;].includes(o.k)) await env.DB.prepare(&#x27;INSERT OR REPLACE INTO inboxk (id, k) VALUES (?, ?)&#x27;).bind(id, o.k).run();
+        if (typeof o.cl === &#x27;number&#x27; &amp;&amp; isFinite(o.cl) &amp;&amp; o.cl &gt;= 0) {
+          const sq = await env.DB.prepare(&#x27;SELECT space FROM inboxsp WHERE id = ?&#x27;).bind(id).first();
+          if (sq &amp;&amp; sq.space === o.space) await env.DB.prepare(&#x27;INSERT OR REPLACE INTO inboxcl (id, cl) VALUES (?, ?)&#x27;).bind(id, Math.floor(o.cl)).run();
+        }
+        return json(req, { ok: true });
+      }
+      if (req.method === &#x27;GET&#x27; &amp;&amp; url.searchParams.get(&#x27;s&#x27;) === &#x27;1&#x27;) {
+        const cz = await env.DB.prepare(&#x27;SELECT cl FROM inboxcl WHERE id = ?&#x27;).bind(id).first();
+        return json(req, { cl: cz ? cz.cl : 0, now });
+      }
+      if (req.method === &#x27;GET&#x27;) {
+        const after = Math.max(0, +url.searchParams.get(&#x27;a&#x27;) || 0);
+        const r = await env.DB.prepare(&#x27;SELECT n, at, data FROM inbox WHERE id = ? AND n &gt; ? ORDER BY n LIMIT 300&#x27;).bind(id, after).all();
+        return json(req, { list: (r.results || []).map(x =&gt; ({ n: x.n, at: x.at, d: x.data })) });
+      }
+      return json(req, { error: &#x27;methode&#x27; }, 405);
+    }
+    // 2.81.0 : menu public d&#x27;un événement (QR « Menu » de l&#x27;affiche). Lisible par tous ; modifiable seulement avec la clé d&#x27;écriture.
+    const pb = url.pathname.match(/^\/pub\/([0-9a-f]{32})$/);
+    if (pb &amp;&amp; env.DB) {
+      await ready(env);
+      const id = pb[1];
+      if (req.method === &#x27;GET&#x27;) {
+        const row = await env.DB.prepare(&#x27;SELECT data, at FROM pubm WHERE id = ?&#x27;).bind(id).first();
+        if (!row) return json(req, { error: &#x27;introuvable&#x27; }, 404);
+        let d = {}; try { d = JSON.parse(row.data) } catch (e) {}
+        return json(req, { at: row.at, d });
+      }
+      if (req.method === &#x27;PUT&#x27;) {
+        const body = await req.text();
+        if (body.length &gt; 700000) return json(req, { error: &#x27;trop gros&#x27; }, 413);
+        let o; try { o = JSON.parse(body) } catch (e) { return json(req, { error: &#x27;illisible&#x27; }, 400) }
+        if (!o || typeof o.k !== &#x27;string&#x27; || o.k.length &lt; 20 || o.k.length &gt; 80 || !o.d || typeof o.d !== &#x27;object&#x27;) return json(req, { error: &#x27;format&#x27; }, 400);
+        const h = Array.from(new Uint8Array(await crypto.subtle.digest(&#x27;SHA-256&#x27;, new TextEncoder().encode(&#x27;agd-pub:&#x27; + o.k)))).map(b =&gt; b.toString(16).padStart(2, &#x27;0&#x27;)).join(&#x27;&#x27;);
+        const row = await env.DB.prepare(&#x27;SELECT k, data FROM pubm WHERE id = ?&#x27;).bind(id).first();
+        if (row &amp;&amp; row.k !== h) return json(req, { error: &#x27;refusé&#x27; }, 403);
+        // l&#x27;image du menu n&#x27;est envoyée que de temps en temps : on garde la précédente si elle n&#x27;est pas renvoyée
+        if (row &amp;&amp; !(&#x27;img&#x27; in o.d)) { try { const pv = JSON.parse(row.data); if (pv &amp;&amp; typeof pv.img === &#x27;string&#x27;) o.d.img = pv.img } catch (e) {} }
+        if (typeof o.d.img === &#x27;string&#x27; &amp;&amp; (o.d.img.length &gt; 650000 || !/^data:image\/(jpeg|png);base64,/.test(o.d.img))) delete o.d.img;
+        const at = Date.now();
+        await env.DB.prepare(&#x27;INSERT OR REPLACE INTO pubm (id, k, data, at) VALUES (?, ?, ?, ?)&#x27;).bind(id, h, JSON.stringify(o.d), at).run();
+        return json(req, { ok: true, at });
+      }
+      return json(req, { error: &#x27;methode&#x27; }, 405);
+    }
     // Notifications : abonnement d&#x27;un téléphone à un groupe, test, et envoi
-    const pm = url.pathname.match(/^\/push\/([0-9a-f]{32})(\/test)?$/);
+    const pm = url.pathname.match(/^\/push\/([0-9a-f]{32})(\/test|\/list)?$/);
     if (pm &amp;&amp; env.DB &amp;&amp; env.VAPID_PRIVATE) {
       if (req.method === &#x27;PUT&#x27;) {
         let o; try { o = JSON.parse(await req.text()) } catch (e) { return json(req, { error: &#x27;illisible&#x27; }, 400) }
@@ -268,8 +358,34 @@ export default {
         await env.DB.prepare(&#x27;INSERT OR REPLACE INTO push3 (endpoint, space, me, pf, at, p, a) VALUES (?, ?, ?, ?, ?, ?, ?)&#x27;).bind(o.endpoint, pm[1], String(o.me || &#x27;&#x27;).slice(0, 20), String(o.pf || &#x27;&#x27;).slice(0, 60), Date.now(), o.keys.p256dh, o.keys.auth).run();
         return json(req, { ok: true });
       }
-      if (req.method === &#x27;POST&#x27; &amp;&amp; pm[2]) return json(req, await pushTest(env, pm[1]));
+      if (req.method === &#x27;POST&#x27; &amp;&amp; pm[2]) {
+        let o = {}; try { o = JSON.parse(await req.text() || &#x27;{}&#x27;) || {} } catch (e) {}
+        const ep = typeof o.endpoint === &#x27;string&#x27; ? o.endpoint.slice(0, 700) : &#x27;&#x27;;
+        if (pm[2] === &#x27;/test&#x27;) return json(req, await pushTest(env, pm[1], ep, String(o.lb || &#x27;&#x27;).slice(0, 40)));
+        // Qui reçoit : identités et rubriques des téléphones inscrits (jamais les adresses)
+        const r = await env.DB.prepare(&#x27;SELECT endpoint, me, pf, at FROM push3 WHERE space = ?&#x27;).bind(pm[1]).all();
+        return json(req, { list: (r.results || []).map(x =&gt; ({ me: x.me, pf: x.pf, at: x.at, mine: !!ep &amp;&amp; x.endpoint === ep })) });
+      }
       return json(req, { error: &#x27;methode&#x27; }, 405);
+    }
+    // Usage D1 du jour (lectures) pour l&#x27;affichage dans l&#x27;appli. Secrets : CF_TOKEN (jeton « Account Analytics : Read »), CF_ACCOUNT (identifiant du compte).
+    if (url.pathname === &#x27;/usage&#x27; &amp;&amp; req.method === &#x27;GET&#x27;) {
+      if (!env.CF_TOKEN || !env.CF_ACCOUNT) return json(req, { ok: false, err: &#x27;config&#x27; });
+      if (USAGE &amp;&amp; Date.now() - USAGE.t &lt; 300000) return json(req, USAGE.v);
+      let v;
+      try {
+        const day = new Date().toISOString().slice(0, 10);
+        const q = &#x27;query($a:string!,$d:Date){viewer{accounts(filter:{accountTag:$a}){d1AnalyticsAdaptiveGroups(limit:1000,filter:{date_geq:$d,date_leq:$d}){sum{rowsRead rowsWritten}}}}}&#x27;;
+        const r = await fetch(&#x27;https://api.cloudflare.com/client/v4/graphql&#x27;, { method: &#x27;POST&#x27;, headers: { &#x27;Authorization&#x27;: &#x27;Bearer &#x27; + env.CF_TOKEN, &#x27;Content-Type&#x27;: &#x27;application/json&#x27; }, body: JSON.stringify({ query: q, variables: { a: env.CF_ACCOUNT, d: day } }) });
+        const j = await r.json();
+        const g = (((j.data || {}).viewer || {}).accounts || [])[0];
+        if (!g) throw new Error(((j.errors || [])[0] || {}).message || &#x27;reponse&#x27;);
+        let rd = 0, wr = 0;
+        for (const x of g.d1AnalyticsAdaptiveGroups || []) { rd += (x.sum &amp;&amp; x.sum.rowsRead) || 0; wr += (x.sum &amp;&amp; x.sum.rowsWritten) || 0 }
+        v = { ok: true, read: rd, write: wr, lim: 5000000, limW: 100000, day };
+      } catch (e) { v = { ok: false, err: &#x27;api&#x27;, msg: String(e &amp;&amp; e.message || e).slice(0, 120) } }
+      USAGE = { t: Date.now(), v };
+      return json(req, v);
     }
     if (url.pathname === &#x27;/vapid&#x27; &amp;&amp; req.method === &#x27;GET&#x27;) return json(req, { k: env.VAPID_PUBLIC || &#x27;&#x27; });
     if (url.pathname === &#x27;/&#x27; || url.pathname === &#x27;/ping&#x27;) return json(req, { ok: true, app: &#x27;asso-malin&#x27;, db: env.DB ? &#x27;d1&#x27; : &#x27;kv&#x27; });
@@ -320,8 +436,8 @@ export default {
       const now = Date.now();
       const r = await env.DB.prepare(&#x27;SELECT endpoint, id, c FROM remind WHERE at &lt;= ? AND at &gt; ? ORDER BY at LIMIT 80&#x27;).bind(now, now - 6 * 3600000).all();
       const rows = r.results || [];
-      const tot = await env.DB.prepare(&#x27;SELECT COUNT(*) AS n, MIN(at) AS a FROM remind&#x27;).first();
-      console.log(&#x27;cron: &#x27; + rows.length + &#x27; rappel(s) à envoyer ; &#x27; + (tot ? tot.n : &#x27;?&#x27;) + &#x27; en attente ; prochain=&#x27; + (tot &amp;&amp; tot.a ? new Date(tot.a).toISOString() : &#x27;-&#x27;));
+      /* 2.82.119 : plus de COUNT(*) toutes les minutes (il relisait toute la table des rappels 1440 fois par jour : des millions de lectures) */
+      if (rows.length) console.log(&#x27;cron: &#x27; + rows.length + &#x27; rappel(s) à envoyer&#x27;);
       for (const x of rows) {
         const s = await env.DB.prepare(&#x27;SELECT endpoint, p, a FROM push3 WHERE endpoint = ? LIMIT 1&#x27;).bind(x.endpoint).first();
         const res = s ? await sendOne(env, s, { e: x.c }) : &#x27;abonnement introuvable&#x27;;

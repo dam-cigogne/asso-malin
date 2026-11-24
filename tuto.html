@@ -306,7 +306,8 @@ export default {
         if ([&#x27;cx&#x27;, &#x27;aq&#x27;, &#x27;qr&#x27;].includes(o.k)) await env.DB.prepare(&#x27;INSERT OR REPLACE INTO inboxk (id, k) VALUES (?, ?)&#x27;).bind(id, o.k).run();
         if (typeof o.cl === &#x27;number&#x27; &amp;&amp; isFinite(o.cl) &amp;&amp; o.cl &gt;= 0) {
           const sq = await env.DB.prepare(&#x27;SELECT space FROM inboxsp WHERE id = ?&#x27;).bind(id).first();
-          if (sq &amp;&amp; sq.space === o.space) await env.DB.prepare(&#x27;INSERT OR REPLACE INTO inboxcl (id, cl) VALUES (?, ?)&#x27;).bind(id, Math.floor(o.cl)).run();
+          /* 2.82.224 : la clôture est enregistrée même si le lien a été créé avec une ancienne clé du groupe (avant, elle était jetée en silence et le lien restait ouvert) */
+          if (sq) await env.DB.prepare(&#x27;INSERT OR REPLACE INTO inboxcl (id, cl) VALUES (?, ?)&#x27;).bind(id, Math.floor(o.cl)).run();
         }
         return json(req, { ok: true });
       }

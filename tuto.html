@@ -302,7 +302,8 @@ export default {
       if (req.method === &#x27;PUT&#x27;) {
         let o; try { o = JSON.parse(await req.text()) } catch (e) { return json(req, { error: &#x27;illisible&#x27; }, 400) }
         if (!o || !/^[0-9a-f]{32}$/.test(o.space || &#x27;&#x27;)) return json(req, { error: &#x27;format&#x27; }, 400);
-        await env.DB.prepare(&#x27;INSERT OR IGNORE INTO inboxsp (id, space, at) VALUES (?, ?, ?)&#x27;).bind(id, o.space, now).run();
+        /* 2.82.224 : après un renouvellement des clés, le lien suit le nouvel espace (avant il restait bloqué sur l&#x27;ancien → notifications d&#x27;inscription perdues) */
+        await env.DB.prepare(&#x27;INSERT INTO inboxsp (id, space, at) VALUES (?, ?, ?) ON CONFLICT (id) DO UPDATE SET space = excluded.space&#x27;).bind(id, o.space, now).run();
         if ([&#x27;cx&#x27;, &#x27;aq&#x27;, &#x27;qr&#x27;].includes(o.k)) await env.DB.prepare(&#x27;INSERT OR REPLACE INTO inboxk (id, k) VALUES (?, ?)&#x27;).bind(id, o.k).run();
         if (typeof o.cl === &#x27;number&#x27; &amp;&amp; isFinite(o.cl) &amp;&amp; o.cl &gt;= 0) {
           const sq = await env.DB.prepare(&#x27;SELECT space FROM inboxsp WHERE id = ?&#x27;).bind(id).first();

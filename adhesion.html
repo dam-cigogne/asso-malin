@@ -87,8 +87,8 @@ try{info=JSON.parse(new TextDecoder().decode(ub64u(h[3]||'')))}catch(e){}
 if(!/^[0-9a-f]{32}$/.test(ID)||X.length<40||Y.length<40){$('c').innerHTML='<h2>Lien incomplet</h2><p>Ce QR code ou ce lien d’adhésion n’est pas complet. Scanne-le à nouveau ou demande le lien au bureau.</p>';return}
 if(info.g){$('g').textContent=info.g;document.title='Adhésion · '+info.g}
 $('w').textContent=info.sa?'Saison '+info.sa:'';
-var GR=['Soldat','1re classe','Caporal','Caporal-chef','Sergent','Sergent-chef','Adjudant','Adjudant-chef','Major','Aspirant','Sous-lieutenant','Lieutenant','Capitaine','Commandant','Lieutenant-colonel','Colonel','Général','Civil','Civil cat. B','Civil cat. C','Extérieur'];
-var CT=[['actif','Actif'],['reserv','Réserviste'],['honneur','Membre d’honneur'],['bienf','Bienfaiteur'],['ancien','Ancien'],['autre','Autre']];
+var GR=['Soldat','1re classe','Caporal','Caporal-chef','Sergent','Sergent-chef','Adjudant','Adjudant-chef','Major','Aspirant','Sous-lieutenant','Lieutenant','Capitaine','Commandant','Lieutenant-colonel','Colonel','Général','Civil','Civil cat. A','Civil cat. B','Civil cat. C','Extérieur'];
+var CT=[['actif','Actif'],['reserv','Réserviste'],['civa','Civil catégorie A'],['civb','Civil catégorie B'],['civc','Civil catégorie C'],['honneur','Membre d’honneur'],['bienf','Bienfaiteur'],['ancien','Ancien'],['autre','Autre']];
 if(/%22c%22/.test(location.search)){$('gr').innerHTML='<option selected>Civil</option>';$('gr').style.display='none';if($('gr').previousElementSibling)$('gr').previousElementSibling.style.display='none'}else $('gr').innerHTML='<option value="">— choisis —</option>'+GR.map(function(g){return '<option>'+g+'</option>'}).join('');
 $('ct').innerHTML=CT.map(function(c){return '<option value="'+c[0]+'">'+c[1]+'</option>'}).join('');
 var AM='',DOC=null,PY='';
